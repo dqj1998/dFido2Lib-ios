@@ -1,5 +1,6 @@
 # dFido2Lib-ios
-A FIDO2 native framework for iOS
+A FIDO2 native framework for iOS.  
+FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is significantly usable in providing stable and customizable user experiences.
 
 ## Target of this project
 1. a Modern project 
@@ -13,7 +14,7 @@ A FIDO2 native framework for iOS
 
 4. Keep source code structure as simple as possible
 
-## Compatible FIDO2 serves 
+## Compatible FIDO2 servers 
 * fido2-node (https://github.com/dqj1998/fido2-node.git) 
 
 * LINE FIDO2 server (https://github.com/line/line-fido2-server.git).  
