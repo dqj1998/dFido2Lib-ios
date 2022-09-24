@@ -1,0 +1,1302 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2000C55A28DF4552001DA3AB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2000C55828DF4552001DA3AB /* README.md */; };
+		2000C55B28DF4552001DA3AB /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2000C55928DF4552001DA3AB /* LICENSE */; };
+		2024425328A8DF3900928825 /* dFido2LibDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2024425228A8DF3900928825 /* dFido2LibDemoApp.swift */; };
+		2024425528A8DF3900928825 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2024425428A8DF3900928825 /* ContentView.swift */; };
+		2024425728A8DF3A00928825 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2024425628A8DF3A00928825 /* Assets.xcassets */; };
+		2024425A28A8DF3A00928825 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2024425928A8DF3A00928825 /* Preview Assets.xcassets */; };
+		2024426428A8DF3B00928825 /* dFido2LibDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2024426328A8DF3B00928825 /* dFido2LibDemoTests.swift */; };
+		2024426E28A8DF3B00928825 /* dFido2LibDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2024426D28A8DF3B00928825 /* dFido2LibDemoUITests.swift */; };
+		2024427028A8DF3B00928825 /* dFido2LibDemoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2024426F28A8DF3B00928825 /* dFido2LibDemoUITestsLaunchTests.swift */; };
+		20330AC128B1D313008B0D6B /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20330AC028B1D313008B0D6B /* Authenticator.swift */; };
+		203323C628C388F600B15F67 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 203323C428C388F600B15F67 /* InfoPlist.strings */; };
+		205F875428B498E1005A3B47 /* LibConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205F875328B498E1005A3B47 /* LibConfig.swift */; };
+		20D84B6128C1F07B0099040E /* COSE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D84B6028C1F07B0099040E /* COSE.swift */; };
+		20D84B6328C2FE3E0099040E /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D84B6228C2FE3E0099040E /* JSON.swift */; };
+		20D84B6528C34EDD0099040E /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D84B6428C34EDD0099040E /* SHA256.swift */; };
+		20D84B6928C34F430099040E /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D84B6828C34F430099040E /* Keychain.swift */; };
+		20E5EBA928AC88350088CFD4 /* dFido2LibCore.docc in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EBA828AC88350088CFD4 /* dFido2LibCore.docc */; };
+		20E5EBAF28AC88350088CFD4 /* dFido2LibCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E5EBA528AC88350088CFD4 /* dFido2LibCore.framework */; };
+		20E5EBB628AC88350088CFD4 /* dFido2LibCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EBB528AC88350088CFD4 /* dFido2LibCoreTests.swift */; };
+		20E5EBB728AC88350088CFD4 /* dFido2LibCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 20E5EBA728AC88350088CFD4 /* dFido2LibCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		20E5EBBA28AC88350088CFD4 /* dFido2LibCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E5EBA528AC88350088CFD4 /* dFido2LibCore.framework */; };
+		20E5EBBB28AC88350088CFD4 /* dFido2LibCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E5EBA528AC88350088CFD4 /* dFido2LibCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E5EBC228AC88470088CFD4 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2024429F28A8E02800928825 /* Client.swift */; };
+		20E5EBCC28AC8A220088CFD4 /* dFido2LibExt.docc in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EBCB28AC8A220088CFD4 /* dFido2LibExt.docc */; };
+		20E5EBD228AC8A230088CFD4 /* dFido2LibExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E5EBC828AC8A220088CFD4 /* dFido2LibExt.framework */; };
+		20E5EBD928AC8A230088CFD4 /* dFido2LibExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EBD828AC8A230088CFD4 /* dFido2LibExtTests.swift */; };
+		20E5EBDA28AC8A230088CFD4 /* dFido2LibExt.h in Headers */ = {isa = PBXBuildFile; fileRef = 20E5EBCA28AC8A220088CFD4 /* dFido2LibExt.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		20E5EBDD28AC8A230088CFD4 /* dFido2LibExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E5EBC828AC8A220088CFD4 /* dFido2LibExt.framework */; };
+		20E5EBDE28AC8A230088CFD4 /* dFido2LibExt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20E5EBC828AC8A220088CFD4 /* dFido2LibExt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E5EC2228ACD7650088CFD4 /* dFido2Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC2128ACD7650088CFD4 /* dFido2Util.swift */; };
+		20E5EC2428ACD9290088CFD4 /* dFido2ClientExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC2328ACD9290088CFD4 /* dFido2ClientExt.swift */; };
+		20E5EC3E28ADF96B0088CFD4 /* CBOR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC3728ADF96B0088CFD4 /* CBOR.swift */; };
+		20E5EC3F28ADF96B0088CFD4 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC3828ADF96B0088CFD4 /* UUID.swift */; };
+		20E5EC4128ADF96B0088CFD4 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC3A28ADF96B0088CFD4 /* Base64.swift */; };
+		20E5EC4228ADF96B0088CFD4 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC3B28ADF96B0088CFD4 /* Bytes.swift */; };
+		20E5EC4328ADF96B0088CFD4 /* WAKTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC3C28ADF96B0088CFD4 /* WAKTypes.swift */; };
+		20E5EC4728AE00090088CFD4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E5EC4628AE00090088CFD4 /* Utils.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2024426028A8DF3B00928825 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2024424E28A8DF3900928825;
+			remoteInfo = dFido2LibDemo;
+		};
+		2024426A28A8DF3B00928825 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2024424E28A8DF3900928825;
+			remoteInfo = dFido2LibDemo;
+		};
+		20E5EBB028AC88350088CFD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20E5EBA428AC88350088CFD4;
+			remoteInfo = dFido2LibCore;
+		};
+		20E5EBB228AC88350088CFD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2024424E28A8DF3900928825;
+			remoteInfo = dFido2LibDemo;
+		};
+		20E5EBB828AC88350088CFD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20E5EBA428AC88350088CFD4;
+			remoteInfo = dFido2LibCore;
+		};
+		20E5EBD328AC8A230088CFD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20E5EBC728AC8A220088CFD4;
+			remoteInfo = dFido2LibExt;
+		};
+		20E5EBD528AC8A230088CFD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2024424E28A8DF3900928825;
+			remoteInfo = dFido2LibDemo;
+		};
+		20E5EBDB28AC8A230088CFD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2024424728A8DF3900928825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20E5EBC728AC8A220088CFD4;
+			remoteInfo = dFido2LibExt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2024429B28A8DF6000928825 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				20E5EBDE28AC8A230088CFD4 /* dFido2LibExt.framework in Embed Frameworks */,
+				20E5EBBB28AC88350088CFD4 /* dFido2LibCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2000C55828DF4552001DA3AB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2000C55928DF4552001DA3AB /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2024424F28A8DF3900928825 /* dFido2LibDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dFido2LibDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2024425228A8DF3900928825 /* dFido2LibDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2LibDemoApp.swift; sourceTree = "<group>"; };
+		2024425428A8DF3900928825 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2024425628A8DF3A00928825 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2024425928A8DF3A00928825 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2024425F28A8DF3B00928825 /* dFido2LibDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dFido2LibDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2024426328A8DF3B00928825 /* dFido2LibDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2LibDemoTests.swift; sourceTree = "<group>"; };
+		2024426928A8DF3B00928825 /* dFido2LibDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dFido2LibDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2024426D28A8DF3B00928825 /* dFido2LibDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2LibDemoUITests.swift; sourceTree = "<group>"; };
+		2024426F28A8DF3B00928825 /* dFido2LibDemoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2LibDemoUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2024429F28A8E02800928825 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		20330AC028B1D313008B0D6B /* Authenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
+		203323C528C388F600B15F67 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		203323C728C388FE00B15F67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		203323C828C3890C00B15F67 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		205F875328B498E1005A3B47 /* LibConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibConfig.swift; sourceTree = "<group>"; };
+		20D84B5F28BE13C10099040E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		20D84B6028C1F07B0099040E /* COSE.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = COSE.swift; sourceTree = "<group>"; };
+		20D84B6228C2FE3E0099040E /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		20D84B6428C34EDD0099040E /* SHA256.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
+		20D84B6828C34F430099040E /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		20E5EBA528AC88350088CFD4 /* dFido2LibCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = dFido2LibCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		20E5EBA728AC88350088CFD4 /* dFido2LibCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dFido2LibCore.h; sourceTree = "<group>"; };
+		20E5EBA828AC88350088CFD4 /* dFido2LibCore.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = dFido2LibCore.docc; sourceTree = "<group>"; };
+		20E5EBAE28AC88350088CFD4 /* dFido2LibCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dFido2LibCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		20E5EBB528AC88350088CFD4 /* dFido2LibCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2LibCoreTests.swift; sourceTree = "<group>"; };
+		20E5EBC828AC8A220088CFD4 /* dFido2LibExt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = dFido2LibExt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		20E5EBCA28AC8A220088CFD4 /* dFido2LibExt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dFido2LibExt.h; sourceTree = "<group>"; };
+		20E5EBCB28AC8A220088CFD4 /* dFido2LibExt.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = dFido2LibExt.docc; sourceTree = "<group>"; };
+		20E5EBD128AC8A230088CFD4 /* dFido2LibExtTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = dFido2LibExtTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		20E5EBD828AC8A230088CFD4 /* dFido2LibExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2LibExtTests.swift; sourceTree = "<group>"; };
+		20E5EC2128ACD7650088CFD4 /* dFido2Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2Util.swift; sourceTree = "<group>"; };
+		20E5EC2328ACD9290088CFD4 /* dFido2ClientExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dFido2ClientExt.swift; sourceTree = "<group>"; };
+		20E5EC3728ADF96B0088CFD4 /* CBOR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBOR.swift; sourceTree = "<group>"; };
+		20E5EC3828ADF96B0088CFD4 /* UUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
+		20E5EC3A28ADF96B0088CFD4 /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
+		20E5EC3B28ADF96B0088CFD4 /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
+		20E5EC3C28ADF96B0088CFD4 /* WAKTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WAKTypes.swift; sourceTree = "<group>"; };
+		20E5EC4628AE00090088CFD4 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2024424C28A8DF3900928825 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBDD28AC8A230088CFD4 /* dFido2LibExt.framework in Frameworks */,
+				20E5EBBA28AC88350088CFD4 /* dFido2LibCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2024425C28A8DF3B00928825 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2024426628A8DF3B00928825 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBA228AC88350088CFD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBAB28AC88350088CFD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBAF28AC88350088CFD4 /* dFido2LibCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBC528AC8A220088CFD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBCE28AC8A230088CFD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBD228AC8A230088CFD4 /* dFido2LibExt.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2024424628A8DF3900928825 = {
+			isa = PBXGroup;
+			children = (
+				2000C55928DF4552001DA3AB /* LICENSE */,
+				2000C55828DF4552001DA3AB /* README.md */,
+				2024425128A8DF3900928825 /* dFido2LibDemo */,
+				2024426228A8DF3B00928825 /* dFido2LibDemoTests */,
+				2024426C28A8DF3B00928825 /* dFido2LibDemoUITests */,
+				20E5EBA628AC88350088CFD4 /* dFido2LibCore */,
+				20E5EBB428AC88350088CFD4 /* dFido2LibCoreTests */,
+				20E5EBC928AC8A220088CFD4 /* dFido2LibExt */,
+				20E5EBD728AC8A230088CFD4 /* dFido2LibExtTests */,
+				2024425028A8DF3900928825 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2024425028A8DF3900928825 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2024424F28A8DF3900928825 /* dFido2LibDemo.app */,
+				2024425F28A8DF3B00928825 /* dFido2LibDemoTests.xctest */,
+				2024426928A8DF3B00928825 /* dFido2LibDemoUITests.xctest */,
+				20E5EBA528AC88350088CFD4 /* dFido2LibCore.framework */,
+				20E5EBAE28AC88350088CFD4 /* dFido2LibCoreTests.xctest */,
+				20E5EBC828AC8A220088CFD4 /* dFido2LibExt.framework */,
+				20E5EBD128AC8A230088CFD4 /* dFido2LibExtTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2024425128A8DF3900928825 /* dFido2LibDemo */ = {
+			isa = PBXGroup;
+			children = (
+				203323C328C388F600B15F67 /* Resource */,
+				20D84B5F28BE13C10099040E /* Info.plist */,
+				2024425228A8DF3900928825 /* dFido2LibDemoApp.swift */,
+				2024425428A8DF3900928825 /* ContentView.swift */,
+				2024425628A8DF3A00928825 /* Assets.xcassets */,
+				2024425828A8DF3A00928825 /* Preview Content */,
+			);
+			path = dFido2LibDemo;
+			sourceTree = "<group>";
+		};
+		2024425828A8DF3A00928825 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2024425928A8DF3A00928825 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2024426228A8DF3B00928825 /* dFido2LibDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				2024426328A8DF3B00928825 /* dFido2LibDemoTests.swift */,
+			);
+			path = dFido2LibDemoTests;
+			sourceTree = "<group>";
+		};
+		2024426C28A8DF3B00928825 /* dFido2LibDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2024426D28A8DF3B00928825 /* dFido2LibDemoUITests.swift */,
+				2024426F28A8DF3B00928825 /* dFido2LibDemoUITestsLaunchTests.swift */,
+			);
+			path = dFido2LibDemoUITests;
+			sourceTree = "<group>";
+		};
+		20330AC228B33B54008B0D6B /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				20D84B6828C34F430099040E /* Keychain.swift */,
+				20D84B6428C34EDD0099040E /* SHA256.swift */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		203323C328C388F600B15F67 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				203323C428C388F600B15F67 /* InfoPlist.strings */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		20E5EBA628AC88350088CFD4 /* dFido2LibCore */ = {
+			isa = PBXGroup;
+			children = (
+				20330AC228B33B54008B0D6B /* libs */,
+				20E5EC3428ADF96B0088CFD4 /* WebAuthnKit */,
+				2024429F28A8E02800928825 /* Client.swift */,
+				20E5EBA728AC88350088CFD4 /* dFido2LibCore.h */,
+				20E5EBA828AC88350088CFD4 /* dFido2LibCore.docc */,
+				20E5EC4628AE00090088CFD4 /* Utils.swift */,
+				20330AC028B1D313008B0D6B /* Authenticator.swift */,
+				205F875328B498E1005A3B47 /* LibConfig.swift */,
+			);
+			path = dFido2LibCore;
+			sourceTree = "<group>";
+		};
+		20E5EBB428AC88350088CFD4 /* dFido2LibCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				20E5EBB528AC88350088CFD4 /* dFido2LibCoreTests.swift */,
+			);
+			path = dFido2LibCoreTests;
+			sourceTree = "<group>";
+		};
+		20E5EBC928AC8A220088CFD4 /* dFido2LibExt */ = {
+			isa = PBXGroup;
+			children = (
+				20E5EBCA28AC8A220088CFD4 /* dFido2LibExt.h */,
+				20E5EBCB28AC8A220088CFD4 /* dFido2LibExt.docc */,
+				20E5EC2128ACD7650088CFD4 /* dFido2Util.swift */,
+				20E5EC2328ACD9290088CFD4 /* dFido2ClientExt.swift */,
+			);
+			path = dFido2LibExt;
+			sourceTree = "<group>";
+		};
+		20E5EBD728AC8A230088CFD4 /* dFido2LibExtTests */ = {
+			isa = PBXGroup;
+			children = (
+				20E5EBD828AC8A230088CFD4 /* dFido2LibExtTests.swift */,
+			);
+			path = dFido2LibExtTests;
+			sourceTree = "<group>";
+		};
+		20E5EC3428ADF96B0088CFD4 /* WebAuthnKit */ = {
+			isa = PBXGroup;
+			children = (
+				20E5EC3528ADF96B0088CFD4 /* Format */,
+				20E5EC3C28ADF96B0088CFD4 /* WAKTypes.swift */,
+			);
+			path = WebAuthnKit;
+			sourceTree = "<group>";
+		};
+		20E5EC3528ADF96B0088CFD4 /* Format */ = {
+			isa = PBXGroup;
+			children = (
+				20D84B6228C2FE3E0099040E /* JSON.swift */,
+				20D84B6028C1F07B0099040E /* COSE.swift */,
+				20E5EC3728ADF96B0088CFD4 /* CBOR.swift */,
+				20E5EC3828ADF96B0088CFD4 /* UUID.swift */,
+				20E5EC3A28ADF96B0088CFD4 /* Base64.swift */,
+				20E5EC3B28ADF96B0088CFD4 /* Bytes.swift */,
+			);
+			path = Format;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		20E5EBA028AC88350088CFD4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBB728AC88350088CFD4 /* dFido2LibCore.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBC328AC8A220088CFD4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBDA28AC8A230088CFD4 /* dFido2LibExt.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2024424E28A8DF3900928825 /* dFido2LibDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2024427328A8DF3B00928825 /* Build configuration list for PBXNativeTarget "dFido2LibDemo" */;
+			buildPhases = (
+				2024424B28A8DF3900928825 /* Sources */,
+				2024424C28A8DF3900928825 /* Frameworks */,
+				2024424D28A8DF3900928825 /* Resources */,
+				2024429B28A8DF6000928825 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20E5EBB928AC88350088CFD4 /* PBXTargetDependency */,
+				20E5EBDC28AC8A230088CFD4 /* PBXTargetDependency */,
+			);
+			name = dFido2LibDemo;
+			productName = dFido2LibDemo;
+			productReference = 2024424F28A8DF3900928825 /* dFido2LibDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2024425E28A8DF3B00928825 /* dFido2LibDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2024427628A8DF3B00928825 /* Build configuration list for PBXNativeTarget "dFido2LibDemoTests" */;
+			buildPhases = (
+				2024425B28A8DF3B00928825 /* Sources */,
+				2024425C28A8DF3B00928825 /* Frameworks */,
+				2024425D28A8DF3B00928825 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2024426128A8DF3B00928825 /* PBXTargetDependency */,
+			);
+			name = dFido2LibDemoTests;
+			productName = dFido2LibDemoTests;
+			productReference = 2024425F28A8DF3B00928825 /* dFido2LibDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2024426828A8DF3B00928825 /* dFido2LibDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2024427928A8DF3B00928825 /* Build configuration list for PBXNativeTarget "dFido2LibDemoUITests" */;
+			buildPhases = (
+				2024426528A8DF3B00928825 /* Sources */,
+				2024426628A8DF3B00928825 /* Frameworks */,
+				2024426728A8DF3B00928825 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2024426B28A8DF3B00928825 /* PBXTargetDependency */,
+			);
+			name = dFido2LibDemoUITests;
+			productName = dFido2LibDemoUITests;
+			productReference = 2024426928A8DF3B00928825 /* dFido2LibDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		20E5EBA428AC88350088CFD4 /* dFido2LibCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20E5EBC028AC88350088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibCore" */;
+			buildPhases = (
+				20E5EBA028AC88350088CFD4 /* Headers */,
+				20E5EBA128AC88350088CFD4 /* Sources */,
+				20E5EBA228AC88350088CFD4 /* Frameworks */,
+				20E5EBA328AC88350088CFD4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dFido2LibCore;
+			productName = dFido2LibCore;
+			productReference = 20E5EBA528AC88350088CFD4 /* dFido2LibCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		20E5EBAD28AC88350088CFD4 /* dFido2LibCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20E5EBC128AC88350088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibCoreTests" */;
+			buildPhases = (
+				20E5EBAA28AC88350088CFD4 /* Sources */,
+				20E5EBAB28AC88350088CFD4 /* Frameworks */,
+				20E5EBAC28AC88350088CFD4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20E5EBB128AC88350088CFD4 /* PBXTargetDependency */,
+				20E5EBB328AC88350088CFD4 /* PBXTargetDependency */,
+			);
+			name = dFido2LibCoreTests;
+			productName = dFido2LibCoreTests;
+			productReference = 20E5EBAE28AC88350088CFD4 /* dFido2LibCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		20E5EBC728AC8A220088CFD4 /* dFido2LibExt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20E5EBDF28AC8A230088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibExt" */;
+			buildPhases = (
+				20E5EBC328AC8A220088CFD4 /* Headers */,
+				20E5EBC428AC8A220088CFD4 /* Sources */,
+				20E5EBC528AC8A220088CFD4 /* Frameworks */,
+				20E5EBC628AC8A220088CFD4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dFido2LibExt;
+			productName = dFido2LibExt;
+			productReference = 20E5EBC828AC8A220088CFD4 /* dFido2LibExt.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		20E5EBD028AC8A230088CFD4 /* dFido2LibExtTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20E5EBE228AC8A230088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibExtTests" */;
+			buildPhases = (
+				20E5EBCD28AC8A230088CFD4 /* Sources */,
+				20E5EBCE28AC8A230088CFD4 /* Frameworks */,
+				20E5EBCF28AC8A230088CFD4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20E5EBD428AC8A230088CFD4 /* PBXTargetDependency */,
+				20E5EBD628AC8A230088CFD4 /* PBXTargetDependency */,
+			);
+			name = dFido2LibExtTests;
+			productName = dFido2LibExtTests;
+			productReference = 20E5EBD128AC8A230088CFD4 /* dFido2LibExtTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2024424728A8DF3900928825 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					2024424E28A8DF3900928825 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					2024425E28A8DF3B00928825 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 2024424E28A8DF3900928825;
+					};
+					2024426828A8DF3B00928825 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 2024424E28A8DF3900928825;
+					};
+					20E5EBA428AC88350088CFD4 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					20E5EBAD28AC88350088CFD4 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 2024424E28A8DF3900928825;
+					};
+					20E5EBC728AC8A220088CFD4 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+					20E5EBD028AC8A230088CFD4 = {
+						CreatedOnToolsVersion = 13.4.1;
+						TestTargetID = 2024424E28A8DF3900928825;
+					};
+				};
+			};
+			buildConfigurationList = 2024424A28A8DF3900928825 /* Build configuration list for PBXProject "dFido2LibDemo" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+				ja,
+			);
+			mainGroup = 2024424628A8DF3900928825;
+			productRefGroup = 2024425028A8DF3900928825 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2024424E28A8DF3900928825 /* dFido2LibDemo */,
+				2024425E28A8DF3B00928825 /* dFido2LibDemoTests */,
+				2024426828A8DF3B00928825 /* dFido2LibDemoUITests */,
+				20E5EBA428AC88350088CFD4 /* dFido2LibCore */,
+				20E5EBAD28AC88350088CFD4 /* dFido2LibCoreTests */,
+				20E5EBC728AC8A220088CFD4 /* dFido2LibExt */,
+				20E5EBD028AC8A230088CFD4 /* dFido2LibExtTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2024424D28A8DF3900928825 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2024425A28A8DF3A00928825 /* Preview Assets.xcassets in Resources */,
+				203323C628C388F600B15F67 /* InfoPlist.strings in Resources */,
+				2000C55A28DF4552001DA3AB /* README.md in Resources */,
+				2024425728A8DF3A00928825 /* Assets.xcassets in Resources */,
+				2000C55B28DF4552001DA3AB /* LICENSE in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2024425D28A8DF3B00928825 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2024426728A8DF3B00928825 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBA328AC88350088CFD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBAC28AC88350088CFD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBC628AC8A220088CFD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBCF28AC8A230088CFD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2024424B28A8DF3900928825 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2024425528A8DF3900928825 /* ContentView.swift in Sources */,
+				2024425328A8DF3900928825 /* dFido2LibDemoApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2024425B28A8DF3B00928825 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2024426428A8DF3B00928825 /* dFido2LibDemoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2024426528A8DF3B00928825 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2024426E28A8DF3B00928825 /* dFido2LibDemoUITests.swift in Sources */,
+				2024427028A8DF3B00928825 /* dFido2LibDemoUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBA128AC88350088CFD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EC3F28ADF96B0088CFD4 /* UUID.swift in Sources */,
+				20E5EC4128ADF96B0088CFD4 /* Base64.swift in Sources */,
+				20D84B6128C1F07B0099040E /* COSE.swift in Sources */,
+				20E5EC4328ADF96B0088CFD4 /* WAKTypes.swift in Sources */,
+				20D84B6328C2FE3E0099040E /* JSON.swift in Sources */,
+				20E5EBA928AC88350088CFD4 /* dFido2LibCore.docc in Sources */,
+				20330AC128B1D313008B0D6B /* Authenticator.swift in Sources */,
+				20D84B6528C34EDD0099040E /* SHA256.swift in Sources */,
+				20E5EC4228ADF96B0088CFD4 /* Bytes.swift in Sources */,
+				20E5EC4728AE00090088CFD4 /* Utils.swift in Sources */,
+				205F875428B498E1005A3B47 /* LibConfig.swift in Sources */,
+				20E5EBC228AC88470088CFD4 /* Client.swift in Sources */,
+				20E5EC3E28ADF96B0088CFD4 /* CBOR.swift in Sources */,
+				20D84B6928C34F430099040E /* Keychain.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBAA28AC88350088CFD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBB628AC88350088CFD4 /* dFido2LibCoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBC428AC8A220088CFD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EC2228ACD7650088CFD4 /* dFido2Util.swift in Sources */,
+				20E5EBCC28AC8A220088CFD4 /* dFido2LibExt.docc in Sources */,
+				20E5EC2428ACD9290088CFD4 /* dFido2ClientExt.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20E5EBCD28AC8A230088CFD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20E5EBD928AC8A230088CFD4 /* dFido2LibExtTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2024426128A8DF3B00928825 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2024424E28A8DF3900928825 /* dFido2LibDemo */;
+			targetProxy = 2024426028A8DF3B00928825 /* PBXContainerItemProxy */;
+		};
+		2024426B28A8DF3B00928825 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2024424E28A8DF3900928825 /* dFido2LibDemo */;
+			targetProxy = 2024426A28A8DF3B00928825 /* PBXContainerItemProxy */;
+		};
+		20E5EBB128AC88350088CFD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20E5EBA428AC88350088CFD4 /* dFido2LibCore */;
+			targetProxy = 20E5EBB028AC88350088CFD4 /* PBXContainerItemProxy */;
+		};
+		20E5EBB328AC88350088CFD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2024424E28A8DF3900928825 /* dFido2LibDemo */;
+			targetProxy = 20E5EBB228AC88350088CFD4 /* PBXContainerItemProxy */;
+		};
+		20E5EBB928AC88350088CFD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20E5EBA428AC88350088CFD4 /* dFido2LibCore */;
+			targetProxy = 20E5EBB828AC88350088CFD4 /* PBXContainerItemProxy */;
+		};
+		20E5EBD428AC8A230088CFD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20E5EBC728AC8A220088CFD4 /* dFido2LibExt */;
+			targetProxy = 20E5EBD328AC8A230088CFD4 /* PBXContainerItemProxy */;
+		};
+		20E5EBD628AC8A230088CFD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2024424E28A8DF3900928825 /* dFido2LibDemo */;
+			targetProxy = 20E5EBD528AC8A230088CFD4 /* PBXContainerItemProxy */;
+		};
+		20E5EBDC28AC8A230088CFD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20E5EBC728AC8A220088CFD4 /* dFido2LibExt */;
+			targetProxy = 20E5EBDB28AC8A230088CFD4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		203323C428C388F600B15F67 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				203323C528C388F600B15F67 /* en */,
+				203323C728C388FE00B15F67 /* zh-Hans */,
+				203323C828C3890C00B15F67 /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2024427128A8DF3B00928825 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2024427228A8DF3B00928825 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2024427428A8DF3B00928825 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"dFido2LibDemo/Preview Content\"";
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = dFido2LibDemo/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2024427528A8DF3B00928825 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"dFido2LibDemo/Preview Content\"";
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = dFido2LibDemo/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2024427728A8DF3B00928825 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dFido2LibDemo.app/dFido2LibDemo";
+			};
+			name = Debug;
+		};
+		2024427828A8DF3B00928825 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dFido2LibDemo.app/dFido2LibDemo";
+			};
+			name = Release;
+		};
+		2024427A28A8DF3B00928825 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = dFido2LibDemo;
+			};
+			name = Debug;
+		};
+		2024427B28A8DF3B00928825 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = dFido2LibDemo;
+			};
+			name = Release;
+		};
+		20E5EBBC28AC88350088CFD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		20E5EBBD28AC88350088CFD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		20E5EBBE28AC88350088CFD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dFido2LibDemo.app/dFido2LibDemo";
+			};
+			name = Debug;
+		};
+		20E5EBBF28AC88350088CFD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dFido2LibDemo.app/dFido2LibDemo";
+			};
+			name = Release;
+		};
+		20E5EBE028AC8A230088CFD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibExt;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		20E5EBE128AC8A230088CFD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibExt;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		20E5EBE328AC8A230088CFD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibExtTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dFido2LibDemo.app/dFido2LibDemo";
+			};
+			name = Debug;
+		};
+		20E5EBE428AC8A230088CFD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RQQ6N82NA8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dqj.dFido2LibExtTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dFido2LibDemo.app/dFido2LibDemo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2024424A28A8DF3900928825 /* Build configuration list for PBXProject "dFido2LibDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2024427128A8DF3B00928825 /* Debug */,
+				2024427228A8DF3B00928825 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2024427328A8DF3B00928825 /* Build configuration list for PBXNativeTarget "dFido2LibDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2024427428A8DF3B00928825 /* Debug */,
+				2024427528A8DF3B00928825 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2024427628A8DF3B00928825 /* Build configuration list for PBXNativeTarget "dFido2LibDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2024427728A8DF3B00928825 /* Debug */,
+				2024427828A8DF3B00928825 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2024427928A8DF3B00928825 /* Build configuration list for PBXNativeTarget "dFido2LibDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2024427A28A8DF3B00928825 /* Debug */,
+				2024427B28A8DF3B00928825 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20E5EBC028AC88350088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20E5EBBC28AC88350088CFD4 /* Debug */,
+				20E5EBBD28AC88350088CFD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20E5EBC128AC88350088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20E5EBBE28AC88350088CFD4 /* Debug */,
+				20E5EBBF28AC88350088CFD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20E5EBDF28AC8A230088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibExt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20E5EBE028AC8A230088CFD4 /* Debug */,
+				20E5EBE128AC8A230088CFD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20E5EBE228AC8A230088CFD4 /* Build configuration list for PBXNativeTarget "dFido2LibExtTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20E5EBE328AC8A230088CFD4 /* Debug */,
+				20E5EBE428AC8A230088CFD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2024424728A8DF3900928825 /* Project object */;
+}

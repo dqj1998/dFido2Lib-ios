@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  dFido2LibDemo
+
+  Created by Du Qingjie on 2022/09/03.
+  
+*/
+NSFaceIDUsageDescription = "生体认证 (dFido2LibDemo)";
