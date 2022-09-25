@@ -14,6 +14,22 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 
 4. Keep source code structure as simple as possible
 
+## Core APIs
+* registerAuthenticator
+* authenticate
+
+## Util APIs
+* Fido2Util.getDefaultRegisterOptions
+* Fido2Core.reset
+* Fido2Core.clearKeys
+* Fido2Core.configExcaptionTimeoutWaiting
+* Fido2Core.configMultipleCredByMultipleTransports
+* Fido2Core.configInsideAuthenticatorResidentStorage
+* Fido2Core.enabledInsideAuthenticatorResidentStorage
+* Fido2Core.configInsideAuthenticatorSilentCredentialDiscovery
+* Fido2Core.configeInsideAuthenticatorDfaultServicePrefix
+
+
 ## Compatible FIDO2 servers 
 * fido2-node (https://github.com/dqj1998/fido2-node.git) 
 
