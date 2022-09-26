@@ -30,7 +30,7 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 * Fido2Core.configeInsideAuthenticatorDfaultServicePrefix
 
 
-## Compatible FIDO2 servers 
+## Tested FIDO2 servers 
 * fido2-node (https://github.com/dqj1998/fido2-node.git) 
 
 * LINE FIDO2 server (https://github.com/line/line-fido2-server.git).  
