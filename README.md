@@ -27,7 +27,6 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 * Fido2Core.configInsideAuthenticatorResidentStorage
 * Fido2Core.enabledInsideAuthenticatorResidentStorage
 * Fido2Core.configInsideAuthenticatorSilentCredentialDiscovery
-* Fido2Core.configeInsideAuthenticatorDfaultServicePrefix
 
 
 ## Tested FIDO2 servers 
