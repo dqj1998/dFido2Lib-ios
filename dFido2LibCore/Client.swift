@@ -80,12 +80,6 @@ public class Fido2Core{
         }
     }
     
-    public static func configeInsideAuthenticatorDfaultServicePrefix(prefix: String){
-        PlatformAuthenticator.defaultServicePrefix = prefix
-        Fido2Core.reset()
-        Fido2Logger.info("Auto reset lib, because change prefix will oast all keys created!")
-    }
-    
     public static func reset(){
         Fido2Core.waitCannotFindAuthenticatorTimeout = true
         Fido2Core.canRegisterMultipleCredByMultipleTransports = false

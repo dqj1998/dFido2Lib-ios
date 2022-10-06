@@ -564,7 +564,7 @@ public protocol Authenticator {
 //MARK: Platform Authenticator
 
 public class PlatformAuthenticator: Authenticator{
-    public static var defaultServicePrefix: String = "dFido2Lib_seckey_"
+    public static var servicePrefix: String = "dFido2Lib_seckey_"
     
     public static var enableResidentStorage: Bool = true
     public static var enableSilentCredentialDiscovery: Bool = true
@@ -640,8 +640,8 @@ public class PlatformAuthenticator: Authenticator{
     public static func clearKeys() -> Bool {
         do{
             try self.credentialStore.removeAll(
-                but: [PlatformAuthenticator.defaultServicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
-                      PlatformAuthenticator.defaultServicePrefix + PlatformAuthenticator.nonResidentSecKeyId])
+                but: [PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
+                      PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyId])
             return true
         } catch {
             Fido2Logger.debug("reset fail")
@@ -1058,11 +1058,11 @@ public class KeychainCredentialStore : CredentialStore {
     public init() {}
     
     public func removeAll(but : [String] = []) throws{
-        try Keychain.removeAll(ServicePrefix: PlatformAuthenticator.defaultServicePrefix, but: but)
+        try Keychain.removeAll(ServicePrefix: PlatformAuthenticator.servicePrefix, but: but)
     }
     
     public func loadAllCredentialSources(rpId: String) throws -> [PublicKeyCredentialSource] {
-        let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + rpId)
+        let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + rpId)
         return try keychain.allKeys().compactMap {
                 if let result = try? keychain.getData($0) {
                     let bytes = result.encodedHexadecimals
@@ -1094,7 +1094,7 @@ public class KeychainCredentialStore : CredentialStore {
         -> Optional<PublicKeyCredentialSource> {
 
             let handle = credentialId.hexa
-            let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + rpId)
+            let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + rpId)
 
             if let result = try? keychain.getData(handle) {
                 let bytes = result.encodedHexadecimals
@@ -1113,7 +1113,7 @@ public class KeychainCredentialStore : CredentialStore {
     
     public func deleteCredentialSource(_ cred: PublicKeyCredentialSource) -> Bool {
         let handle = cred.id
-        let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + cred.rpId)
+        let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + cred.rpId)
         
         do {
             try keychain.remove(handle.hexa)
@@ -1128,7 +1128,7 @@ public class KeychainCredentialStore : CredentialStore {
 
     public func saveCredentialSource(_ cred: PublicKeyCredentialSource) throws {
         let handle = cred.id
-        let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + cred.rpId)
+        let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + cred.rpId)
 
         if let bytes = try cred.toCBOR() {
             do {
@@ -1145,14 +1145,14 @@ public class KeychainCredentialStore : CredentialStore {
     
     public func saveKey(keyChainId: String, handle: String, key: Data) throws {
 
-        let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + keyChainId)
+        let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + keyChainId)
 
         try keychain.set(key, key: handle)
     }
     
     public func retrieveKey(keyChainId: String, handle: String) throws -> Data? {
 
-        let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + keyChainId)
+        let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + keyChainId)
 
         if let rtn = try keychain.getData(handle) {
             return rtn
@@ -1162,7 +1162,7 @@ public class KeychainCredentialStore : CredentialStore {
     
     public func deleteKey(keyChainId: String, handle: String) throws {
         
-        let keychain = Keychain(service: PlatformAuthenticator.defaultServicePrefix + keyChainId)
+        let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + keyChainId)
         
         do {
             try keychain.remove(handle)
