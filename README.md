@@ -33,7 +33,9 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 * fido2-node (https://github.com/dqj1998/fido2-node.git) 
 
 * LINE FIDO2 server (https://github.com/line/line-fido2-server.git).  
-(Does not support real non-resident credentials)
+** Does not support real non-resident credentials
+** Requires cookies managemant of client side to manage sessions
+ 
 
 ## Thanks
 * https://github.com/lyokato/WebAuthnKit-iOS.git

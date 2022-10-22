@@ -637,11 +637,11 @@ public class PlatformAuthenticator: Authenticator{
         }
     }
     
-    public static func clearKeys() -> Bool {
+    public static func clearKeys(rpId:String="") -> Bool {
         do{
             try self.credentialStore.removeAll(
                 but: [PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
-                      PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyId])
+                      PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyId], rpId: rpId)
             return true
         } catch {
             Fido2Logger.debug("reset fail")
@@ -745,7 +745,7 @@ public class PlatformAuthenticator: Authenticator{
                 userHandle: credSource.userHandle
             )
 
-            // TODO should remove fron KeyPair too?
+            // No keys in KeyChain becaseu we don't use attributes kSecAttrIsPermanent
             
             try PlatformAuthenticator.credentialStore.saveCredentialSource(credSource)
             
@@ -1050,20 +1050,21 @@ public protocol CredentialStore {
     func deleteCredentialSource(_ cred: PublicKeyCredentialSource) -> Bool
     func deleteAllCredentialSources(rpId: String, userHandle: [UInt8]) throws
     
-    func removeAll(but : [String]) throws
+    func removeAll(but : [String], rpId : String) throws
 }
 
 public class KeychainCredentialStore : CredentialStore {
 
     public init() {}
     
-    public func removeAll(but : [String] = []) throws{
-        try Keychain.removeAll(ServicePrefix: PlatformAuthenticator.servicePrefix, but: but)
+    public func removeAll(but : [String] = [], rpId: String = "") throws{
+        try Keychain.removeAll(ServicePrefix: PlatformAuthenticator.servicePrefix + rpId, but: but)
     }
     
     public func loadAllCredentialSources(rpId: String) throws -> [PublicKeyCredentialSource] {
         let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + rpId)
-        return try keychain.allKeys().compactMap {
+        let keys = keychain.allKeys()
+        return try keys.compactMap {
                 if let result = try? keychain.getData($0) {
                     let bytes = result.encodedHexadecimals
                     if 0 < bytes.count {

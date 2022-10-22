@@ -7,10 +7,11 @@
 
 import Foundation
 
+// return: userhandles？
 public class dFido2ClientExt{
-    public static func listRegisteredAuthenticators(username: String, displayname: String) -> Dictionary<String, Any> {
-        var authenticators = Dictionary<String, Any>()
+    public static func syncServerCredentails(fido2SvrURL:String, rpId: String) -> Array<String> {
+        var userhandles = Array<String>()
         
-        return authenticators
+        return userhandles
     }
 }

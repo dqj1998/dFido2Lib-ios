@@ -88,16 +88,18 @@ public class Fido2Core{
         PlatformAuthenticator.enableSilentCredentialDiscovery = true
         _ = PlatformAuthenticator.reset()
         
-        //TODO: Reset server-side?
+        //Client cannot reset/clear server-side according to WebAuthN spec.
+        //Server can clear based on users' operation or inactivity check.
+        //We may add some ext methods to support client-side management
     }
     
-    public static func clearKeys(){
-        _ = PlatformAuthenticator.clearKeys()
+    public static func clearKeys(rpId:String=""){
+        _ = PlatformAuthenticator.clearKeys(rpId:rpId)
     }
     
     //dqj TODO: cancel method(6.3.4. The authenticatorCancel Operation)
     
-    public func registerAuthenticator(fido2SvrURL:String, username: String, displayname: String,
+    public func registerAuthenticator(fido2SvrURL:String,
                                       attestationOptions: Dictionary<String, Any>,
                                       message: String
                         ) async throws -> Bool {

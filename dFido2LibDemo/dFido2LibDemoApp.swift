@@ -12,7 +12,7 @@ import dFido2LibCore
 struct dFido2LibDemoApp: App {
     init() {
         Fido2Logger.enable_debug = true
-        Fido2Core.configInsideAuthenticatorResidentStorage(enable: false)
+        //Fido2Core.configInsideAuthenticatorResidentStorage(enable: false)
     }
     var body: some Scene {
         WindowGroup {

@@ -13,15 +13,22 @@ struct ContentView: View {
     private let fido2SvrURL = "https://mac.dqj-macpro.com" /*"http://192.168.0.124:3000"*/
     
     @State private var proceee_results:String = "---"
+    @State private var inside_resident_storage:String =
+        (Fido2Core.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
+    
     @State private var username:String = ""
     @State private var displayname:String = ""
+    @State private var rpid:String = ""
     
     var body: some View {
         VStack {
-            HStack{
+            VStack{
                 Text("dFido2Lib Demo")
-                    .font(.largeTitle)
+                    .font(.title)
                     .fontWeight(.bold)
+                Spacer()
+                Text(self.inside_resident_storage)
+                    .padding()
             }
             
             HStack{
@@ -53,8 +60,8 @@ struct ContentView: View {
                         opt["authenticatorSelection"] = authenticatorSelection
                         
                         let core = Fido2Core()
-                        let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, username: username,
-                                              displayname: displayname, attestationOptions: opt, message: "Register new authenticator")
+                        let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, attestationOptions: opt,
+                                                                          message: "Register new authenticator")
                         if result { proceee_results = "Register succ"}
                         else { proceee_results = "Register error"}
                     }catch{
@@ -158,6 +165,36 @@ struct ContentView: View {
                     Task{
                         Fido2Core.reset()
                         proceee_results = "Reset done"
+                        
+                    inside_resident_storage =
+                        (Fido2Core.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
+                    }
+                }
+            }
+            
+            Text("-")
+                .padding()
+                .font(.title)
+                .frame(minHeight: 30)
+            
+            HStack{
+                TextField("rpId", text: $rpid)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding()
+                
+                Text("|")
+                    .padding()
+                    .font(.title)
+                    .frame(minHeight: 30)
+                
+                Button("Clear RP") {
+                    if rpid.isEmpty {
+                        proceee_results = "Input rp to clear, please."
+                    }else{
+                        Task{
+                            Fido2Core.clearKeys(rpId: rpid)
+                            proceee_results = "Clear rp done"
+                        }
                     }
                 }
             }
