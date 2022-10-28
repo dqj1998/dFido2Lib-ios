@@ -39,7 +39,7 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 # Extension features
 
 ## Multiple rps
-One domain can support multiple RPs by set rp.id. has to work with fido2-node server.
+One domain can support multiple RPs by set rp.id. Has to work with fido2-node server.
 
 
 # Thanks
