@@ -8,7 +8,7 @@
 import Foundation
 
 public class Fido2Util{
-    public static func getDefaultRegisterOptions(username: String, displayname: String) -> Dictionary<String, Any> {
+    public static func getDefaultRegisterOptions(username: String, displayname: String, rpId: String = "") -> Dictionary<String, Any> {
         
         var authenticatorSelection = Dictionary<String, Any>()
         authenticatorSelection["userVerification"]="preferred"
@@ -18,10 +18,16 @@ public class Fido2Util{
         attestationOptions["displayName"] = displayname
         attestationOptions["authenticatorSelection"] = authenticatorSelection
         
+        if rpId.count > 0 {
+            var rpOptions = Dictionary<String, Any>()
+            rpOptions["id"] = rpId
+            attestationOptions["rp"] = rpOptions
+        }
+        
         return attestationOptions
     }
     
-    public static func getDefaultAuthenticateOptions(username: String = "") -> Dictionary<String, Any> {
+    public static func getDefaultAuthenticateOptions(username: String = "", rpId: String = "") -> Dictionary<String, Any> {
         
         var authenticatorSelection = Dictionary<String, Any>()
         authenticatorSelection["userVerification"]="preferred"
@@ -34,6 +40,12 @@ public class Fido2Util{
         }
         
         assertionOptions["authenticatorSelection"] = authenticatorSelection
+        
+        if 0 < rpId.count {
+            var rpOptions = Dictionary<String, Any>()
+            rpOptions["id"] = rpId
+            assertionOptions["rp"] = rpOptions
+        }
         
         return assertionOptions
     }

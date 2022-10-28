@@ -2,7 +2,7 @@
 A FIDO2 native framework for iOS.  
 FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is significantly usable in providing stable and customizable user experiences.
 
-## Target of this project
+# Target of this project
 1. a Modern project 
 
   * Modern Swift async/await mechanism rather than embedded callbacks. 
@@ -14,11 +14,11 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 
 4. Keep source code structure as simple as possible
 
-## Core APIs
+# Core APIs
 * registerAuthenticator
 * authenticate
 
-## Util APIs
+# Util APIs
 * Fido2Util.getDefaultRegisterOptions
 * Fido2Core.reset
 * Fido2Core.clearKeys
@@ -29,15 +29,20 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 * Fido2Core.configInsideAuthenticatorSilentCredentialDiscovery
 
 
-## Tested FIDO2 servers 
+# Tested FIDO2 servers 
 * fido2-node (https://github.com/dqj1998/fido2-node.git) 
 
 * LINE FIDO2 server (https://github.com/line/line-fido2-server.git).  
 ** Does not support real non-resident credentials
 ** Requires cookies managemant of client side to manage sessions
  
+# Extension features
 
-## Thanks
+## Multiple rps
+One domain can support multiple RPs by set rp.id. has to work with fido2-node server.
+
+
+# Thanks
 * https://github.com/lyokato/WebAuthnKit-iOS.git
 
 ## Contact

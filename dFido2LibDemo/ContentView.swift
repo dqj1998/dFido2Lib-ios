@@ -18,7 +18,8 @@ struct ContentView: View {
     
     @State private var username:String = ""
     @State private var displayname:String = ""
-    @State private var rpid:String = ""
+    @State private var rpid = 0
+    @State private var rpids = ["mac.dqj-macpro.com","rp01", "rp02"]
     
     var body: some View {
         VStack {
@@ -29,6 +30,14 @@ struct ContentView: View {
                 Spacer()
                 Text(self.inside_resident_storage)
                     .padding()
+            }
+            
+            VStack{
+                Picker(selection: $rpid, label: Text("rpId")) {
+                    ForEach(0..<rpids.count) { index in
+                        Text(rpids[index])
+                    }
+                }
             }
             
             HStack{
@@ -42,8 +51,8 @@ struct ContentView: View {
             
             Text(self.proceee_results)
                 .padding()
-                .font(.title)
-                .frame(minHeight: 100)
+                .font(.headline)
+                .frame(minHeight: 20)
 
             Button("Register FIDO2") {
                 if !processInputs(){return}
@@ -52,7 +61,7 @@ struct ContentView: View {
                 Task{
                     do{
                         var opt = Fido2Util.getDefaultRegisterOptions(username: username,
-                                                                      displayname: displayname)
+                                                                      displayname: displayname, rpId: rpids[rpid])
                         
                         //Example of customizing options
                         var authenticatorSelection = opt["authenticatorSelection"] as! Dictionary<String, String>
@@ -79,7 +88,7 @@ struct ContentView: View {
             Text("-")
                 .padding()
                 .font(.title)
-                .frame(minHeight: 30)
+                .frame(minHeight: 10)
             
             HStack{
                 Button("Auth FIDO2") {
@@ -88,7 +97,7 @@ struct ContentView: View {
                     proceee_results = "Authenticating..."
                     Task{
                         do{
-                            let opt = Fido2Util.getDefaultAuthenticateOptions(username: username)
+                            let opt = Fido2Util.getDefaultAuthenticateOptions(username: username, rpId: rpids[rpid])
                             
                             let core = Fido2Core()
                             let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself")
@@ -109,14 +118,14 @@ struct ContentView: View {
                 Text("|")
                     .padding()
                     .font(.title)
-                    .frame(minHeight: 30)
+                    .frame(minHeight: 10)
                 
                 Button("Auth FIDO2\n(Discovery)") {
                     if Fido2Core.enabledInsideAuthenticatorResidentStorage() {
                         proceee_results = "Discovery Authenticating..."
                         Task{
                             do{
-                                let opt = Fido2Util.getDefaultAuthenticateOptions()
+                                let opt = Fido2Util.getDefaultAuthenticateOptions(rpId: rpids[rpid])
                                 
                                 let core = Fido2Core()
                                 let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself")
@@ -142,7 +151,8 @@ struct ContentView: View {
             Text("-")
                 .padding()
                 .font(.title)
-                .frame(minHeight: 30)
+                .frame(minHeight: 10)
+            
             HStack{
                 Button("Clear keys") {
                     self.proceee_results = "Clearing..."
@@ -157,7 +167,7 @@ struct ContentView: View {
                 Text("|")
                     .padding()
                     .font(.title)
-                    .frame(minHeight: 30)
+                    .frame(minHeight: 10)
                 
                 Button("Reset Lib") {
                     self.proceee_results = "Reseting..."
@@ -170,31 +180,16 @@ struct ContentView: View {
                         (Fido2Core.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
                     }
                 }
-            }
-            
-            Text("-")
-                .padding()
-                .font(.title)
-                .frame(minHeight: 30)
-            
-            HStack{
-                TextField("rpId", text: $rpid)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .padding()
                 
                 Text("|")
                     .padding()
                     .font(.title)
-                    .frame(minHeight: 30)
+                    .frame(minHeight: 10)
                 
                 Button("Clear RP") {
-                    if rpid.isEmpty {
-                        proceee_results = "Input rp to clear, please."
-                    }else{
-                        Task{
-                            Fido2Core.clearKeys(rpId: rpid)
-                            proceee_results = "Clear rp done"
-                        }
+                    Task{
+                        Fido2Core.clearKeys(rpId: rpids[rpid])
+                        proceee_results = "Clear rp done"
                     }
                 }
             }
