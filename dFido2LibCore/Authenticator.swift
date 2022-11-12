@@ -595,8 +595,9 @@ public class PlatformAuthenticator: Authenticator{
         
         //init non-resident keys
         do{
-            if try PlatformAuthenticator.credentialStore.retrieveKey(keyChainId: PlatformAuthenticator.nonResidentSecKeyRP,
-                                                    handle: PlatformAuthenticator.nonResidentSecKeyId) == nil {
+            if try KeyTools.retrieveKey(
+                    keyChainId: PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
+                    handle: PlatformAuthenticator.nonResidentSecKeyId) == nil {
                 
                 var error: Unmanaged<CFError>?
                 let privateKey = SecKeyCreateRandomKey(PlatformAuthenticator.nonResidentSecKeyAlgPara, &error)
@@ -607,8 +608,9 @@ public class PlatformAuthenticator: Authenticator{
                 guard let rawdata = SecKeyCopyExternalRepresentation(privateKey!, &error) as? Data else {
                     throw Fido2Error.new(error: .unknown, message: "Init PlatformAuthenticator fail \(String(describing: error))")
                 }
-                try PlatformAuthenticator.credentialStore.saveKey(keyChainId: PlatformAuthenticator.nonResidentSecKeyRP, handle:
-                                                PlatformAuthenticator.nonResidentSecKeyId, key: rawdata)
+                try KeyTools.saveKey(
+                    keyChainId: PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
+                    handle: PlatformAuthenticator.nonResidentSecKeyId, key: rawdata)
             }
         } catch {
             Fido2Logger.err("Init PlatformAuthenticator fail \(error)")
@@ -670,7 +672,9 @@ public class PlatformAuthenticator: Authenticator{
         }
         
         if !hasSourceToBeExcluded && !excludeCredentialDescriptorList.isEmpty {//Check non-resident
-            if let pkey = try PlatformAuthenticator.credentialStore.retrieveKey(keyChainId: PlatformAuthenticator.nonResidentSecKeyRP, handle: PlatformAuthenticator.nonResidentSecKeyId) {
+            if let pkey = try KeyTools.retrieveKey(
+                    keyChainId: PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
+                    handle: PlatformAuthenticator.nonResidentSecKeyId) {
                 var error: Unmanaged<CFError>?
                 for cred in excludeCredentialDescriptorList{
                     do{
@@ -732,7 +736,8 @@ public class PlatformAuthenticator: Authenticator{
         var credSource = PublicKeyCredentialSource(
             id: credentialId, privateKey: privateKey!,
             rpId:       rpEntity.id!,
-            userHandle: Array(Base64.decodeBase64URLTry(userEntity.id) ?? Data())
+            userHandle: Array(Base64.decodeBase64URLTry(userEntity.id) ?? Data()),
+            otherUI: ""
         )
         
         if requireResidentKey {
@@ -750,8 +755,9 @@ public class PlatformAuthenticator: Authenticator{
             try PlatformAuthenticator.credentialStore.saveCredentialSource(credSource)
             
         } else {
-            if let pkey = try PlatformAuthenticator.credentialStore.retrieveKey(keyChainId: PlatformAuthenticator.nonResidentSecKeyRP,
-                                                               handle: PlatformAuthenticator.nonResidentSecKeyId){
+            if let pkey = try KeyTools.retrieveKey(
+                    keyChainId: PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP,
+                    handle: PlatformAuthenticator.nonResidentSecKeyId){
                 Fido2Logger.debug("retrieveKey: \(String(describing: pkey))")
                 
                 let csCBOR = try credSource.toCBOR()
@@ -923,7 +929,8 @@ public class PlatformAuthenticator: Authenticator{
             return try PlatformAuthenticator.credentialStore.loadAllCredentialSources(rpId: rpId)
         } else {
             //Lookup non-resident Credential Source by decrypting Credential ID
-            if let pkey = try PlatformAuthenticator.credentialStore.retrieveKey(keyChainId: PlatformAuthenticator.nonResidentSecKeyRP, handle: PlatformAuthenticator.nonResidentSecKeyId) {
+            if let pkey = try KeyTools.retrieveKey(
+                    keyChainId: PlatformAuthenticator.servicePrefix + PlatformAuthenticator.nonResidentSecKeyRP, handle: PlatformAuthenticator.nonResidentSecKeyId) {
                 var error: Unmanaged<CFError>?
                 for allowCred in allowCredentialDescriptorList{
                     do{
@@ -1144,7 +1151,7 @@ public class KeychainCredentialStore : CredentialStore {
         }
     }
     
-    public func saveKey(keyChainId: String, handle: String, key: Data) throws {
+    /*public func saveKey(keyChainId: String, handle: String, key: Data) throws {
 
         let keychain = Keychain(service: PlatformAuthenticator.servicePrefix + keyChainId)
 
@@ -1172,7 +1179,7 @@ public class KeychainCredentialStore : CredentialStore {
             throw Fido2Error.new(error: .unknown, message: "deleteKey fail: \(error)")
         }
 
-    }
+    }*/
 }
     
 //MARK: Platform Authenticator Crypto support

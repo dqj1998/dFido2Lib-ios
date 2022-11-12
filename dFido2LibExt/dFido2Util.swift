@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import dFido2LibCore
 
 public class Fido2Util{
     public static func getDefaultRegisterOptions(username: String, displayname: String, rpId: String = "") -> Dictionary<String, Any> {
@@ -48,6 +49,10 @@ public class Fido2Util{
         }
         
         return assertionOptions
+    }
+    
+    public static func configAccountListExt(enable: Bool = true) {
+        Fido2Core.enableAccountsList = enable
     }
 }
 

@@ -9,8 +9,15 @@ import SwiftUI
 import dFido2LibCore
 import dFido2LibExt
 
+let fido2SvrURL = "https://mac.dqj-macpro.com" /*"http://192.168.0.124:3000"*/
+
+let rpids = ["mac.dqj-macpro.com","rp01.abc.com", "rp02.def.com"]
+
+var cur_accounts:[String] = []
+var cur_credBase64Ids:[String] = []
+
 struct ContentView: View {
-    private let fido2SvrURL = "https://mac.dqj-macpro.com" /*"http://192.168.0.124:3000"*/
+    
     
     @State private var proceee_results:String = "---"
     @State private var inside_resident_storage:String =
@@ -19,7 +26,10 @@ struct ContentView: View {
     @State private var username:String = ""
     @State private var displayname:String = ""
     @State private var rpid = 0
-    @State private var rpids = ["mac.dqj-macpro.com","rp01", "rp02"]
+    
+    @State private var selectedAccountIndex:Int = -1
+    @State private var isShowingPicker = false
+   
     
     var body: some View {
         VStack {
@@ -37,6 +47,11 @@ struct ContentView: View {
                     ForEach(0..<rpids.count) { index in
                         Text(rpids[index])
                     }
+                }.onChange(of: rpid) { tag in
+                    selectedAccountIndex = -1
+                    cur_accounts = []
+                    cur_credBase64Ids = []
+                    self.isShowingPicker=false
                 }
             }
             
@@ -100,7 +115,7 @@ struct ContentView: View {
                             let opt = Fido2Util.getDefaultAuthenticateOptions(username: username, rpId: rpids[rpid])
                             
                             let core = Fido2Core()
-                            let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself")
+                            let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself", nil)
                             if result { proceee_results = "Authenticate succ"}
                             else { proceee_results = "Authenticate error"}
                         }catch{
@@ -120,32 +135,67 @@ struct ContentView: View {
                     .font(.title)
                     .frame(minHeight: 10)
                 
-                Button("Auth FIDO2\n(Discovery)") {
-                    if Fido2Core.enabledInsideAuthenticatorResidentStorage() {
-                        proceee_results = "Discovery Authenticating..."
-                        Task{
-                            do{
-                                let opt = Fido2Util.getDefaultAuthenticateOptions(rpId: rpids[rpid])
-                                
-                                let core = Fido2Core()
-                                let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself")
-                                if result { proceee_results = "Auth Discovery succ"}
-                                else { proceee_results = "Auth Discovery error"}
-                            }catch{
-                                Fido2Logger.err("call registerAuthenticator fail: \(error)")
-                                if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
-                                    proceee_results = "Auth Discovery " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
-                                } else {
-                                    proceee_results = "Auth Discovery " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
+                ZStack {
+                    Button("Auth FIDO2\n(Discovery)") {
+                        var accCount = 0
+                        if Fido2Core.enableAccountsList {
+                            let accounts = dFido2ClientExt.listAccounts(rpId: rpids[rpid])
+                            if nil != accounts && (accounts!.accounts.count > 1){
+                                accCount = accounts!.accounts.count
+                                Fido2Logger.debug("Count:" + String(accounts!.accounts.count))
+                                cur_accounts=[]; cur_credBase64Ids=[]
+                                for acc in accounts!.accounts {
+                                    var name = acc.displayname
+                                    if name.isEmpty
+                                    {
+                                        name = acc.username
+                                    }
+                                    cur_accounts.append(name)
+                                    cur_credBase64Ids.append(acc.credIdBase64)
                                 }
+                                
+                                self.isShowingPicker=true
                             }
                         }
-                    } else {
-                        proceee_results = "Resident storage is disabled!"
+                        
+                        /*if Fido2Core.enabledInsideAuthenticatorResidentStorage() {
+                            proceee_results = "Discovery Authenticating..."
+                            Task{
+                                do{
+                                    let opt = Fido2Util.getDefaultAuthenticateOptions(rpId: rpids[rpid])
+                                    
+                                    let core = Fido2Core()
+                                    var credId:Data?
+                                    if 0<=selectedAccountIndex {
+                                        credId = Base64.decodeBase64URL(cur_credBase64Ids[selectedAccountIndex])!                                        
+                                    }
+                                    let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself", credId?.encodedHexadecimals)
+                                    if result { proceee_results = "Auth Discovery succ"}
+                                    else { proceee_results = "Auth Discovery error"}
+                                }catch{
+                                    Fido2Logger.err("call registerAuthenticator fail: \(error)")
+                                    if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
+                                        proceee_results = "Auth Discovery " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
+                                    } else {
+                                        proceee_results = "Auth Discovery " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
+                                    }
+                                }
+                            }
+                        } else {
+                            proceee_results = "Resident storage is disabled!"
+                        }*/
+                        if 0==accCount {
+                            Task{
+                                proceee_results = await authDiscover(rpId: rpids[rpid], selectedAccountIndex: -1)
+                            }
+                        }
                     }
                     
+                    AccountPicker(selection: self.$selectedAccountIndex, isShowing: self.$isShowingPicker,
+                                  proceee_results: self.$proceee_results, rpid: $rpid)
+                                    .animation(.linear)
+                                    .offset(y: self.isShowingPicker ? 0 : UIScreen.main.bounds.height)
                 }
-                
             }
             
             Text("-")
@@ -207,6 +257,75 @@ struct ContentView: View {
             displayname = "Display_" + username
         }
         return true
+    }
+    
+    
+}
+
+public func authDiscover(rpId: String, selectedAccountIndex: Int) async -> String {
+    var rtn = ""
+    if Fido2Core.enabledInsideAuthenticatorResidentStorage() {
+            do{
+                let opt = Fido2Util.getDefaultAuthenticateOptions(rpId: rpId)
+                
+                let core = Fido2Core()
+                var credId:Data?
+                if 0<=selectedAccountIndex {
+                    credId = Base64.decodeBase64URL(cur_credBase64Ids[selectedAccountIndex])!
+                }
+                let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself", credId?.encodedHexadecimals)
+                if result { rtn = "Auth Discovery succ"}
+                else { rtn = "Auth Discovery error"}
+            }catch{
+                Fido2Logger.err("call registerAuthenticator fail: \(error)")
+                if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
+                    rtn = "Auth Discovery " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
+                } else {
+                    rtn = "Auth Discovery " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
+                }
+            }
+        
+    } else {
+        rtn = "Resident storage is disabled!"
+    }
+    
+    return rtn
+}
+
+struct AccountPicker: View {
+    @Binding var selection: Int
+    @Binding var isShowing: Bool
+    @Binding var proceee_results: String
+    @Binding var rpid: Int
+    var body: some View {
+        VStack {
+            Spacer()
+            Button(action: {
+                self.isShowing = false
+            }) {
+                /*HStack {
+                    Spacer()
+                    Text("Close").padding(.horizontal, 16)
+                }*/
+            }
+            
+            Picker(selection: $selection, label: Text("")) {
+                Text("Please select user account").tag(-1)
+                ForEach(0..<cur_accounts.count, id: \.self) { index in
+                    Text(cur_accounts[index]).tag(index)
+                }
+            }
+            .frame(width: 200)
+            .labelsHidden()
+            .onChange(of: selection) { tag in
+                if -1 != tag {
+                    proceee_results = "Discovery Authenticating..."
+                    Task{
+                        proceee_results = await authDiscover(rpId: rpids[rpid], selectedAccountIndex: tag)
+                    }
+                }
+            }
+        }
     }
 }
 

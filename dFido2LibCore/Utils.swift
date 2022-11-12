@@ -14,7 +14,7 @@ extension DataProtocol {
 }
 
 extension Data {
-    var encodedHexadecimals: [UInt8] {
+    public var encodedHexadecimals: [UInt8] {
         return self.withUnsafeBytes { pointer -> [UInt8] in
             guard let address = pointer
                     .bindMemory(to: UInt8.self)
@@ -98,5 +98,47 @@ public class Fido2Logger {
         formatter.dateFormat = "yyyyMMddHHmmss"
         let dateString = formatter.string(from: Date())
         print("\(dateString) [Fido2Logger-" + level.rawValue + "]" + msg)
+    }
+}
+
+public class KeyTools {
+    
+    public static func saveKey(keyChainId: String, handle: String, key: Data) throws {
+        
+        let keychain = Keychain(service: keyChainId)
+        
+        try keychain.set(key, key: handle)
+    }
+    
+    public static func retrieveKey(keyChainId: String, handle: String) throws -> Data? {
+        
+        let keychain = Keychain(service: keyChainId)
+        
+        if let rtn = try keychain.getData(handle) {
+            return rtn
+        }
+        return nil
+    }
+    
+    public static func deleteKey(keyChainId: String, handle: String) throws {
+        
+        let keychain = Keychain(service: keyChainId)
+        
+        do {
+            try keychain.remove(handle)
+        } catch let error {
+            Fido2Logger.debug("deleteKey fail: \(error)")
+            throw Fido2Error.new(error: .unknown, message: "deleteKey fail: \(error)")
+        }
+        
+    }
+    
+    public static func clearKey(keyChainIdPrefix: String, handle: String?=nil) throws {
+        if nil == handle || handle!.isEmpty{
+            try Keychain.removeAll(ServicePrefix: keyChainIdPrefix)
+        }else{
+            try deleteKey(keyChainId: keyChainIdPrefix, handle: handle!)
+        }
+        
     }
 }

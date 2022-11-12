@@ -27,7 +27,9 @@ public class Fido2Core{
     
     private let authenticatorPlatform: PlatformAuthenticator = PlatformAuthenticator()
     
+    public static var enableAccountsList: Bool = false
     
+    public static var AccountsKeyId: String = "dFido2Lib_client_accounts"
     
     public init() {
         self.curTimeout = self.defaultTimeout
@@ -88,6 +90,8 @@ public class Fido2Core{
         PlatformAuthenticator.enableSilentCredentialDiscovery = true
         _ = PlatformAuthenticator.reset()
         
+        try? KeyTools.clearKey(keyChainIdPrefix: Fido2Core.AccountsKeyId)
+        
         //Client cannot reset/clear server-side according to WebAuthN spec.
         //Server can clear based on users' operation or inactivity check.
         //We may add some ext methods to support client-side management
@@ -95,6 +99,7 @@ public class Fido2Core{
     
     public static func clearKeys(rpId:String=""){
         _ = PlatformAuthenticator.clearKeys(rpId:rpId)
+        try? KeyTools.clearKey(keyChainIdPrefix: Fido2Core.AccountsKeyId, handle: rpId)
     }
     
     //dqj TODO: cancel method(6.3.4. The authenticatorCancel Operation)
@@ -155,6 +160,25 @@ public class Fido2Core{
             if !rsltStr.isEmpty {
                 if let rep = try JSONSerialization.jsonObject(with: rsltStr.data(using: String.Encoding.utf8)!, options: []) as? [String: Any] {
                     rtn = nil != rep["status"] && (rep["status"] as! String).uppercased() == "OK"
+                    
+                    if rtn && Fido2Core.enableAccountsList{
+                        let rp = pubkCredCrtOpts.rp.id ?? pubkCredCrtOpts.rp.name
+                        let acc = Account(rpid: rp, username: pubkCredCrtOpts.user.name, displayname: pubkCredCrtOpts.user.displayName, credIdBase64: pubkeyCred.id)
+                        let accounts = try? KeyTools.retrieveKey(keyChainId: Fido2Core.AccountsKeyId, handle: rp)
+                        if nil == accounts{
+                            let new_accounts = Accounts(accounts: [acc])
+                            try? KeyTools.saveKey(keyChainId: Fido2Core.AccountsKeyId, handle: rp, key: Data(new_accounts.toJSON()!.utf8))
+                        }else{
+                            var cur_accounts = Accounts.fromJSON(json: String(data: accounts!, encoding: .utf8)!)
+                            if nil != cur_accounts{
+                                cur_accounts!.accounts.append(acc)
+                                try? KeyTools.saveKey(keyChainId: Fido2Core.AccountsKeyId, handle: rp, key: Data(cur_accounts!.toJSON()!.utf8))
+                            }else{
+                                Fido2Logger.err("Accounts.fromJSON is nil.")
+                            }
+                        }
+                    }
+                    
                     if !rtn && !Fido2Core.enabledInsideAuthenticatorResidentStorage() {
                         Fido2Logger.err("Most like your FIDO2 server does not really support non-resident Credentials, if you confirmed all other cases.")
                     }
@@ -174,7 +198,7 @@ public class Fido2Core{
     }
     
     public func authenticate(fido2SvrURL:String, assertionOptions: Dictionary<String, Any>,
-                                      message: String
+                             message: String, _ selectedCredId:[UInt8]?
                         ) async throws -> Bool {
         var rtn=false;
         
@@ -209,7 +233,12 @@ public class Fido2Core{
                 pubkCredReqOpts.mediation = CredentialMediationRequirement(rawValue: assertionOptions["mediation"] as! String)
             }
             
-            let pubkeyCred = try await self.discoverFromExternalSource(options: pubkCredReqOpts, origin: fido2SvrURL, message: message)
+            if nil == pubkCredReqOpts.rpId && nil != assertionOptions["rp"] && nil != (assertionOptions["rp"] as! Dictionary<String, Any>)["id"] {
+                pubkCredReqOpts.rpId = (assertionOptions["rp"] as! Dictionary<String, Any>)["id"] as! String?
+            }
+            
+            let pubkeyCred = try await self.discoverFromExternalSource(options: pubkCredReqOpts, origin: fido2SvrURL, message: message,
+                                                                       selectedCredId: selectedCredId)
             jsonStr = pubkeyCred.toJSON() ?? ""
             Fido2Logger.debug("</assertion/result> req: \(jsonStr)")
             
@@ -515,7 +544,8 @@ public class Fido2Core{
     
     /// Authentication methods
     /// https://w3c.github.io/webauthn/#sctn-discover-from-external-source
-    private func discoverFromExternalSource(options: PublicKeyCredentialRequestOptions, origin: String, message: String)async throws -> PublicKeyCredential<AuthenticatorAssertionResponse>{
+    private func discoverFromExternalSource(options: PublicKeyCredentialRequestOptions, origin: String, message: String,
+                                            selectedCredId: [UInt8]?)async throws -> PublicKeyCredential<AuthenticatorAssertionResponse>{
         
         // 5.1.4.1 1-2, 5,6: No need as a lib
         
@@ -575,9 +605,17 @@ public class Fido2Core{
             if options.mediation == .conditional && authenticator.canSilentCredentialDiscovery() {
                 let pubKeyCreds = try authenticator.silentCredentialDiscovery(rpId: rpId)
                 
-                //TODO: Selection UI
+                //We provide accounts list feature, not Selection UI here.
                 if !pubKeyCreds.isEmpty {
-                    let pubKeyDesc = PublicKeyCredentialDescriptor (id: Base64.encodeBase64URL(pubKeyCreds[0].id), transports: [authenticator.transport.rawValue])
+                    var pubKeyDesc:PublicKeyCredentialDescriptor
+                    if (selectedCredId != nil) {
+                        pubKeyDesc = PublicKeyCredentialDescriptor (id: Base64.encodeBase64URL(selectedCredId!), transports: [authenticator.transport.rawValue])
+                    }else{
+                        if 1 < pubKeyCreds.count {
+                            Fido2Logger.info("Discovered more then one credentials, return the first one. Enable AccountsList, list accounts and let user to select credential.")
+                        }
+                        pubKeyDesc = PublicKeyCredentialDescriptor (id: Base64.encodeBase64URL(pubKeyCreds[0].id), transports: [authenticator.transport.rawValue])
+                    }
                     realAllowCredentials = [pubKeyDesc]
                 }
             }
@@ -752,3 +790,35 @@ internal class myUrlSessionDelegate : NSObject, URLSessionDelegate{
 
 }
 
+public struct Account : Codable{
+    public var rpid: String
+    public var username: String
+    public var displayname: String
+    public var credIdBase64: String
+    
+    public func toJSON() -> Optional<String>{
+        return JSONHelper<Account>.encode(self)
+    }
+    
+    public static func fromJSON(json: String) -> Optional<Account> {
+        guard let rtn = JSONHelper<Account>.decode(json) else {
+            return nil
+        }
+        return rtn
+    }
+}
+
+public struct Accounts : Codable{
+    public var accounts: [Account]
+    
+    public func toJSON() -> Optional<String>{
+        return JSONHelper<Accounts>.encode(self)
+    }
+    
+    public static func fromJSON(json: String) -> Optional<Accounts> {
+        guard let rtn = JSONHelper<Accounts>.decode(json) else {
+            return nil
+        }
+        return rtn
+    }
+}
