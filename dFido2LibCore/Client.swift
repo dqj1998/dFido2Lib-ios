@@ -21,9 +21,9 @@ public class Fido2Core{
     
     private var startTime: Double?
     
-    private static var waitCannotFindAuthenticatorTimeout:Bool = true
+    public static var waitCannotFindAuthenticatorTimeout:Bool = true
     
-    private static var canRegisterMultipleCredByMultipleTransports: Bool = false
+    public static var canRegisterMultipleCredByMultipleTransports: Bool = false
     
     private let authenticatorPlatform: PlatformAuthenticator = PlatformAuthenticator()
     
@@ -33,53 +33,6 @@ public class Fido2Core{
     
     public init() {
         self.curTimeout = self.defaultTimeout
-    }
-    
-    /*
-     Must wait for the timeout before sending excaption when cannot find authenticator according to the FIDO2 spec.
-     You can enable/disable this feature.
-     Default is enabled
-     But be careful, disabling this feature may decrease the security level.
-     */
-    public static func configExcaptionTimeoutWaiting(enable: Bool){
-        waitCannotFindAuthenticatorTimeout = enable
-    }
-    
-    /*
-    Enable = Can register one device as mutiple authenticators through differet transports
-    Default is false
-    Refer spec 5.1.3 - 20.7: For each credential descriptor C in options.excludeCredentials
-    */
-    public static func configMultipleCredByMultipleTransports(enable: Bool){
-        canRegisterMultipleCredByMultipleTransports = enable
-    }
-    
-    /*
-     Config if the inside authenticator storage resident keys.
-     Default is enabled.
-     */
-    public static func configInsideAuthenticatorResidentStorage(enable: Bool){
-        PlatformAuthenticator.enableResidentStorage = enable
-        if !enable {
-            PlatformAuthenticator.enableSilentCredentialDiscovery = false
-            Fido2Logger.info("Auto disabled inside authenticator SilentCredentialDiscovery.")
-        }
-    }
-    
-    public static func enabledInsideAuthenticatorResidentStorage() -> Bool{
-        return PlatformAuthenticator.enableResidentStorage
-    }
-    
-    /*
-     Config if the inside authenticator can SilentCredentialDiscovery.
-     Default is enabled.
-     */
-    public static func configInsideAuthenticatorSilentCredentialDiscovery(enable: Bool){
-        PlatformAuthenticator.enableSilentCredentialDiscovery = enable
-        if enable {
-            PlatformAuthenticator.enableResidentStorage = true
-            Fido2Logger.info("Auto enabled inside authenticator ResidentStorage.")
-        }
     }
     
     public static func reset(){
@@ -179,7 +132,7 @@ public class Fido2Core{
                         }
                     }
                     
-                    if !rtn && !Fido2Core.enabledInsideAuthenticatorResidentStorage() {
+                    if !rtn && !LibConfig.enabledInsideAuthenticatorResidentStorage() {
                         Fido2Logger.err("Most like your FIDO2 server does not really support non-resident Credentials, if you confirmed all other cases.")
                     }
                 } else {
@@ -366,7 +319,8 @@ public class Fido2Core{
             
             let userPresence = !userVerification //dqj: A miss of spec?
             
-            let enterpriseAttestationPossible = false //TODO: support enterprise
+            let enterpriseAttestationPossible = options.attestation == AttestationConveyancePreference.enterprise &&
+                                                    LibConfig.enterpriseRPIds.contains(options.rp.id ?? "")
             
             var excludeCredentialDescriptorList: [PublicKeyCredentialDescriptor]
             if Fido2Core.canRegisterMultipleCredByMultipleTransports {

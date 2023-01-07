@@ -750,7 +750,7 @@ public class PlatformAuthenticator: Authenticator{
                 userHandle: credSource.userHandle
             )
 
-            // No keys in KeyChain becaseu we don't use attributes kSecAttrIsPermanent
+            // No keys in KeyChain because we don't use attributes kSecAttrIsPermanent
             
             try PlatformAuthenticator.credentialStore.saveCredentialSource(credSource)
             
@@ -944,7 +944,7 @@ public class PlatformAuthenticator: Authenticator{
                     }
                 }
             }
-            if !Fido2Core.enabledInsideAuthenticatorResidentStorage() {
+            if !LibConfig.enabledInsideAuthenticatorResidentStorage() {
                 Fido2Logger.info("No non-resident Credential found, we start to try resident Credential. So we may use a Credential that created before you disabling InsideAuthenticatorResidentStorage if auth succ. Calling Fido2Core.clearKeys() can clear all resident Credentials. rpId: \(rpId)")
             }
             

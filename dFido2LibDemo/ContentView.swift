@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @State private var proceee_results:String = "---"
     @State private var inside_resident_storage:String =
-        (Fido2Core.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
+        (LibConfig.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
     
     @State private var username:String = ""
     @State private var displayname:String = ""
@@ -227,7 +227,7 @@ struct ContentView: View {
                         proceee_results = "Reset done"
                         
                     inside_resident_storage =
-                        (Fido2Core.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
+                        (LibConfig.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
                     }
                 }
                 
@@ -264,7 +264,7 @@ struct ContentView: View {
 
 public func authDiscover(rpId: String, selectedAccountIndex: Int) async -> String {
     var rtn = ""
-    if Fido2Core.enabledInsideAuthenticatorResidentStorage() {
+    if LibConfig.enabledInsideAuthenticatorResidentStorage() {
             do{
                 let opt = Fido2Util.getDefaultAuthenticateOptions(rpId: rpId)
                 

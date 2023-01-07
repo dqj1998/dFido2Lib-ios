@@ -51,8 +51,5 @@ public class Fido2Util{
         return assertionOptions
     }
     
-    public static func configAccountListExt(enable: Bool = true) {
-        Fido2Core.enableAccountsList = enable
-    }
 }
 
