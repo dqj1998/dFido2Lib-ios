@@ -41,6 +41,10 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 ## Multiple rps
 One domain can support multiple RPs by set rp.id. Has to work with fido2-node server.
 
+## Enterprise authenticator
+Support aaguid checking for enterprise attestation.
+1. Register enterpise rpids and aaguids in env file of fido2-node server by ENTERPRISE_RPs and ENTERPRISE_AAGUIDs
+2. Call setPlatformAuthenticatorAAGUID and addEnterpriseRPIds on SDK side
 
 # Thanks
 * https://github.com/lyokato/WebAuthnKit-iOS.git
