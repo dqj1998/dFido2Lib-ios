@@ -19,9 +19,9 @@ struct dFido2LibDemoApp: App {
         
         //Configs for enterprise attestation
         ///16 char, Cannot double with aaguids in FIDO2 meta data(https://mds3.fidoalliance.org/)
-        ///Have to register ENTERPRISE_RPs and ENTERPRISE_AAGUIDs in fido2-node server env file
+        ///Have to set enterprise to true and set enterprise_aaguids in doamn.json on server
         ///Changing to an unregistered aaguid will get error of registration.
-        LibConfig.setPlatformAuthenticatorAAGUID(aaguid: "aaguid_rp01_0000")
+        LibConfig.setPlatformAuthenticatorAAGUID(aaguid: "aaguid_test_0000")
         
         LibConfig.addEnterpriseRPIds(ids: ["rp01.abc.com", "rp02.def.com"])
     }
