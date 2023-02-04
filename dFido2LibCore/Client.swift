@@ -64,6 +64,8 @@ public class Fido2Core{
         var rtn=false;
         
         do {
+            try checkDevice()
+            
             self.startTime = Date().timeIntervalSince1970
             self.processTimeout = false
             if nil != self.processTimer {
@@ -156,6 +158,8 @@ public class Fido2Core{
         var rtn=false;
         
         do{
+            try checkDevice()
+            
             self.startTime = Date().timeIntervalSince1970
             self.processTimeout = false
             if nil != self.processTimer {

@@ -12,6 +12,8 @@ import dFido2LibExt
 @main
 struct dFido2LibDemoApp: App {
     init() {
+        LibConfig.enableJailBroken = true //For development, comment out for product!
+        
         LibConfig.enableDebugLog()
         LibConfig.configAccountListExt(enable: true)
         

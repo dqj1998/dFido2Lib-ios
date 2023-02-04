@@ -12,6 +12,8 @@ public class LibConfig{
     
     public static var enterpriseRPIds: [String] = []
     
+    public static var enableJailBroken: Bool = false
+    
     public static func enableDebugLog(){
         Fido2Logger.enable_debug = true;
     }
