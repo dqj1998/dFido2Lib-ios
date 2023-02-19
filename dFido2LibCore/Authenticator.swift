@@ -788,9 +788,15 @@ public class PlatformAuthenticator: Authenticator{
             }
         }
 
-        // TODO Extension Processing
-        let extensions = SimpleOrderedDictionary<String>()
-        
+        var the_extensions:SimpleOrderedDictionary<String>
+        if(!extensions.isEmpty){
+            the_extensions = SimpleOrderedDictionary<String>.fromDictionary(extensions)
+        }else{
+            the_extensions = SimpleOrderedDictionary<String>()
+        }
+        try the_extensions.addString(LibConfig.deviceUniqueIdKey, getUniqueId())
+        //the_extensions.addString("test_extensions_key", "Test_extensions_val")//for dev
+                
         let attestedCredData = AttestedCredentialData(
             aaguid:              LibConfig.aaguid,
             credentialId:        credentialId,
@@ -808,7 +814,7 @@ public class PlatformAuthenticator: Authenticator{
             backupState:            false,
             signCount:              0, //dqj TODO: support non-zero count
             attestedCredentialData: attestedCredData,
-            extensions:             extensions
+            extensions:             the_extensions
         )
 
         guard let attestation = try
@@ -827,7 +833,7 @@ public class PlatformAuthenticator: Authenticator{
     
     public func authenticatorGetAssertion(message: String, rpId: String, clientDataHash: [UInt8], allowCredentialDescriptorList: [PublicKeyCredentialDescriptor], requireUserPresence: Bool, requireUserVerification: Bool, extensions: Dictionary<String, [UInt8]>) async throws -> Optional<AuthenticatorAssertionResult> {
         
-        var credSources = try self.gatherCredentialSources(
+        let credSources = try self.gatherCredentialSources(
                 rpId:                          rpId,
                 allowCredentialDescriptorList: allowCredentialDescriptorList
         )
@@ -841,7 +847,7 @@ public class PlatformAuthenticator: Authenticator{
         
         //dqj TODO: Support processedExtensions
         
-        var newSignCount: UInt32 = 0//dqj TODO: Support sign counter
+        let newSignCount: UInt32 = 0//dqj TODO: Support sign counter
         
         //dqj TODO: select cred & signCount
         let copiedCred = credSources.first
@@ -849,8 +855,14 @@ public class PlatformAuthenticator: Authenticator{
         //newSignCount = copiedCred.signCount
         //try PlatformAuthenticator.credentialStore.saveCredentialSource(copiedCred!)
         
-        let extensions = SimpleOrderedDictionary<String>()
-
+        var the_extensions:SimpleOrderedDictionary<String>
+        if(!extensions.isEmpty){
+            the_extensions = SimpleOrderedDictionary<String>.fromDictionary(extensions)
+        }else{
+            the_extensions = SimpleOrderedDictionary<String>()
+        }
+        try the_extensions.addString(LibConfig.deviceUniqueIdKey, getUniqueId())
+        
         let authenticatorData = AuthenticatorData(
             rpIdHash:               SHA256(Array(rpId.utf8)).calculate32(), //rpId.bytes.sha256(),
             userPresent:            (requireUserPresence || requireUserVerification),
@@ -859,7 +871,7 @@ public class PlatformAuthenticator: Authenticator{
             backupState:            false,
             signCount:              newSignCount,
             attestedCredentialData: nil,
-            extensions:             extensions
+            extensions:             the_extensions
         )
 
         let authenticatorDataBytes = try authenticatorData.toBytes()

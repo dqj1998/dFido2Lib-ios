@@ -46,6 +46,8 @@ Support aaguid checking for enterprise attestation.
 1. Register enterpise rpids and aaguids in env file of fido2-node server by ENTERPRISE_RPs and ENTERPRISE_AAGUIDs
 2. Call setPlatformAuthenticatorAAGUID and addEnterpriseRPIds on SDK side
 
+## JailBroken devices check
+
 # Thanks
 * https://github.com/lyokato/WebAuthnKit-iOS.git
 

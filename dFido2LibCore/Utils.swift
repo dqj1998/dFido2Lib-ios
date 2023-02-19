@@ -228,3 +228,21 @@ private struct JailBrokenHelper {
         ]
     }
 }
+
+public func getUniqueId() throws -> String{
+    let userDef = UserDefaults(suiteName: "dFido2Lib_data")
+    var rtn = userDef!.string(forKey: LibConfig.deviceUniqueIdKey)
+    if(rtn == nil){
+        rtn = UUID().uuidString
+        if(nil == rtn){
+            Fido2Logger.err("Cannot generate device unique id.")
+            throw Fido2Error.new(error: .unknown, message: "Cannot generate device unique id.")
+        }
+        userDef!.set(rtn, forKey: LibConfig.deviceUniqueIdKey)
+    }
+    
+    //For debug chnaged unique device id
+    //rtn! += "c"
+    
+    return rtn!
+}

@@ -8,6 +8,8 @@
 import Foundation
 
 public class LibConfig{
+    public static let deviceUniqueIdKey: String = "dfido2_device_unique_id"
+    
     public static var aaguid: [UInt8] = UUIDHelper.zeroBytes
     
     public static var enterpriseRPIds: [String] = []
