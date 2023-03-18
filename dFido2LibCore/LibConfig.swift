@@ -84,8 +84,19 @@ public class LibConfig{
      Normally this is for enterprise attention
      */
     public static func setPlatformAuthenticatorAAGUID(aaguid:String){
-        LibConfig.aaguid = Array(aaguid.utf8)
+        LibConfig.aaguid = readHexString(hexString: aaguid) //Array(aaguid.utf8)
     }
     
-    
+    static func readHexString(hexString: String) -> [UInt8]{
+        let length = hexString.count / 2
+        var byteArray = [UInt8](repeating: 0, count: length)
+
+        for i in 0..<length {
+            let startIndex = hexString.index(hexString.startIndex, offsetBy: i*2)
+            let endIndex = hexString.index(startIndex, offsetBy: 2)
+            let subString = hexString[startIndex..<endIndex]
+            byteArray[i] = UInt8(subString, radix: 16)!
+        }
+        return byteArray
+    }
 }
