@@ -46,6 +46,11 @@ Support aaguid checking for enterprise attestation.
 1. Register enterpise rpids and aaguids in env file of fido2-node server by ENTERPRISE_RPs and ENTERPRISE_AAGUIDs
 2. Call setPlatformAuthenticatorAAGUID and addEnterpriseRPIds on SDK side
 
+## Unique device binded key
+Cannot auth with a unique device binded key from a different device(another installation of SDK).
+Usually, this feature is to force disable key synchronization among devices to gain a more robust security level.
+This feature has to work with fido2-node server.
+
 ## JailBroken devices check
 
 # Thanks
