@@ -15,11 +15,13 @@ let rpids = ["mac.dqj-macpro.com","rp01.abc.com", "rp02.def.com"]
 
 var cur_accounts:[String] = []
 var cur_credBase64Ids:[String] = []
+var user_devices:[Dictionary<String, Any>] = []
+var user_devices_txt:[String] = []
 
 struct ContentView: View {
     
     
-    @State private var proceee_results:String = "---"
+    @State public var proceee_results:String = "---"
     @State private var inside_resident_storage:String =
         (LibConfig.enabledInsideAuthenticatorResidentStorage() ? "Enabled inside ResidentStorage" : "Disabled inside ResidentStorage")
     
@@ -29,7 +31,9 @@ struct ContentView: View {
     
     @State private var selectedAccountIndex:Int = -1
     @State private var isShowingPicker = false
-   
+    
+    @State private var selectedDeviceIndex:Int = -1
+    @State private var isShowingDevicesPicker = false
     
     var body: some View {
         VStack {
@@ -64,6 +68,11 @@ struct ContentView: View {
                                 .padding()
             }
             
+            DevicesPicker(selection: self.$selectedDeviceIndex, isShowing: self.$isShowingDevicesPicker, rpid: $rpid)
+                            .animation(.linear)
+                            .offset(y: self.isShowingDevicesPicker ? 0 : UIScreen.main.bounds.height)
+
+            
             Text(self.proceee_results)
                 .padding()
                 .font(.headline)
@@ -72,7 +81,8 @@ struct ContentView: View {
             Button("Register FIDO2") {
                 if !processInputs(){return}
                 
-                proceee_results = "Registering..."        
+                proceee_results = "Registering..."
+                isShowingDevicesPicker = false
                 Task{
                     do{
                         var opt = Fido2Util.getDefaultRegisterOptions(username: username,
@@ -86,8 +96,11 @@ struct ContentView: View {
                         let core = Fido2Core()
                         let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, attestationOptions: opt,
                                                                           message: "Register new authenticator")
-                        if result { proceee_results = "Register succ"}
-                        else { proceee_results = "Register error"}
+                        if result {
+                            proceee_results = "Register succ"
+                            try await loadUserDevices(core: core, rpId: rpids[rpid])
+                            isShowingDevicesPicker = true
+                        } else { proceee_results = "Register error"}
                     }catch{
                         Fido2Logger.err("call registerAuthenticator fail: \(error)")
                         if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
@@ -110,13 +123,19 @@ struct ContentView: View {
                     if !processInputs(){return}
                     
                     proceee_results = "Authenticating..."
+                    isShowingDevicesPicker = false
                     Task{
                         do{
                             let opt = Fido2Util.getDefaultAuthenticateOptions(username: username, rpId: rpids[rpid])
                             
                             let core = Fido2Core()
                             let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself", nil)
-                            if result { proceee_results = "Authenticate succ"}
+                            if result {
+                                //Load devices
+                                try await loadUserDevices(core: core, rpId: rpids[rpid])
+                                isShowingDevicesPicker = true
+                                proceee_results = "Authenticate succ"
+                            }
                             else { proceee_results = "Authenticate error"}
                         }catch{
                             Fido2Logger.err("call registerAuthenticator fail: \(error)")
@@ -158,32 +177,6 @@ struct ContentView: View {
                             }
                         }
                         
-                        /*if Fido2Core.enabledInsideAuthenticatorResidentStorage() {
-                            proceee_results = "Discovery Authenticating..."
-                            Task{
-                                do{
-                                    let opt = Fido2Util.getDefaultAuthenticateOptions(rpId: rpids[rpid])
-                                    
-                                    let core = Fido2Core()
-                                    var credId:Data?
-                                    if 0<=selectedAccountIndex {
-                                        credId = Base64.decodeBase64URL(cur_credBase64Ids[selectedAccountIndex])!                                        
-                                    }
-                                    let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself", credId?.encodedHexadecimals)
-                                    if result { proceee_results = "Auth Discovery succ"}
-                                    else { proceee_results = "Auth Discovery error"}
-                                }catch{
-                                    Fido2Logger.err("call registerAuthenticator fail: \(error)")
-                                    if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
-                                        proceee_results = "Auth Discovery " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
-                                    } else {
-                                        proceee_results = "Auth Discovery " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
-                                    }
-                                }
-                            }
-                        } else {
-                            proceee_results = "Resident storage is disabled!"
-                        }*/
                         if 0==accCount {
                             Task{
                                 proceee_results = await authDiscover(rpId: rpids[rpid], selectedAccountIndex: -1)
@@ -274,7 +267,9 @@ public func authDiscover(rpId: String, selectedAccountIndex: Int) async -> Strin
                     credId = Base64.decodeBase64URL(cur_credBase64Ids[selectedAccountIndex])!
                 }
                 let result = try await core.authenticate(fido2SvrURL: fido2SvrURL, assertionOptions: opt, message: "Authenticate yourself", credId?.encodedHexadecimals)
-                if result { rtn = "Auth Discovery succ"}
+                if result {
+                    rtn = "Auth Discovery succ"
+                }
                 else { rtn = "Auth Discovery error"}
             }catch{
                 Fido2Logger.err("call registerAuthenticator fail: \(error)")
@@ -290,6 +285,18 @@ public func authDiscover(rpId: String, selectedAccountIndex: Int) async -> Strin
     }
     
     return rtn
+}
+
+func loadUserDevices(core: Fido2Core, rpId: String) async throws{
+    user_devices = try await core.listUserDevices(fido2SvrURL: fido2SvrURL, rpId: rpId)
+    user_devices_txt = []
+    for index in 0..<user_devices.count {
+        if(nil == user_devices[index]["desc"] || (user_devices[index]["desc"] as! String).utf8.count == 0){
+            user_devices_txt.append(user_devices[index]["userAgent"] as! String)
+        }else{
+            user_devices_txt.append(user_devices[index]["desc"] as! String)
+        }
+    }
 }
 
 struct AccountPicker: View {
@@ -328,6 +335,50 @@ struct AccountPicker: View {
         }
     }
 }
+
+struct DevicesPicker: View {
+    @Binding var selection: Int
+    @Binding var isShowing: Bool
+    @Binding var rpid: Int
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            Button(action: {
+                self.isShowing = false
+            }) {
+                /*HStack {
+                    Spacer()
+                    Text("Close").padding(.horizontal, 16)
+                }*/
+            }
+            
+            Picker(selection: $selection, label: Text("")) {
+                Text("User devices").tag(-1)
+                ForEach(0..<user_devices.count, id: \.self) { index in
+                    Text(user_devices_txt[index]).tag(index)
+                }
+            }
+            .frame(width: 300)
+            .labelsHidden()
+            .onChange(of: selection) { tag in
+                if -1 != tag {
+                    let core = Fido2Core()
+                    Task{
+                        //del device
+                        let result = try await core.delUserDevice(fido2SvrURL: fido2SvrURL, deviceId: user_devices[tag]["device_id"] as! Int, rpId: rpids[rpid])
+                        if(result){
+                            user_devices.remove(at: tag)
+                            self.isShowing = false
+                            self.isShowing = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

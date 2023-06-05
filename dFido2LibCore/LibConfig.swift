@@ -16,6 +16,8 @@ public class LibConfig{
     
     public static var enableJailBroken: Bool = false
     
+    public static var deviceName: String = "dFido2Lib-iOS" //Device name on user's device list
+    
     public static func enableDebugLog(){
         Fido2Logger.enable_debug = true;
     }

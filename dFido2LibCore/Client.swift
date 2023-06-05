@@ -10,6 +10,8 @@ import UIKit
 import CryptoKit
 import SwiftUI
 
+private var sessionId: String = ""
+
 public class Fido2Core{
     public let defaultTimeout: Double = 2 * 60
     public let minTimeout: Double = 1
@@ -72,11 +74,13 @@ public class Fido2Core{
                 self.processTimer!.invalidate()
             }
             
+            sessionId = ""
+            
             let jsonData = try JSONSerialization.data(withJSONObject: attestationOptions)
             var jsonStr = String(bytes: jsonData, encoding: .utf8)!
             Fido2Logger.debug("</attestation/options> req: \(jsonStr)")
             
-            let headers = ["application/json":"content-type"]
+            let headers = ["User-Agent":LibConfig.deviceName] //["application/json":"content-type"] //, 
             
             let optsData = try await httpRequest(url: fido2SvrURL+"/attestation/options", method: "POST",
                                                  body: jsonStr.data(using: .utf8)!, headers: headers,
@@ -115,6 +119,7 @@ public class Fido2Core{
             if !rsltStr.isEmpty {
                 if let rep = try JSONSerialization.jsonObject(with: rsltStr.data(using: String.Encoding.utf8)!, options: []) as? [String: Any] {
                     rtn = nil != rep["status"] && (rep["status"] as! String).uppercased() == "OK"
+                    sessionId = rep["session"] as! String
                     
                     if rtn && Fido2Core.enableAccountsList{
                         let rp = pubkCredCrtOpts.rp.id ?? pubkCredCrtOpts.rp.name
@@ -166,11 +171,13 @@ public class Fido2Core{
                 self.processTimer!.invalidate()
             }
             
+            sessionId = ""
+            
             let jsonData = try JSONSerialization.data(withJSONObject: assertionOptions)
             var jsonStr = String(bytes: jsonData, encoding: .utf8)!
             Fido2Logger.debug("</assertion/options> req: \(jsonStr)")
             
-            let headers = ["application/json":"content-type"]
+            let headers = ["User-Agent":LibConfig.deviceName] //["application/json":"content-type"]
             
             let optsData = try await httpRequest(url: fido2SvrURL+"/assertion/options", method: "POST",
                                                  body: jsonStr.data(using: .utf8)!, headers: headers,
@@ -222,10 +229,133 @@ public class Fido2Core{
                 throw Fido2Error(error: .timeout)
             }
             
-            rtn = nil != resp && resp!["status"] != nil && (resp!["status"] as! String).uppercased()=="OK"
+            if(nil != resp && resp!["status"] != nil && (resp!["status"] as! String).uppercased()=="OK"){
+                sessionId = resp!["session"] != nil ? resp!["session"] as! String:""
+                rtn = true
+            }
             
         } catch {
             Fido2Logger.err("Authentication fail: \(error)")
+            throw error
+        }
+        
+        return rtn
+    }
+    
+    //TODO: Process recovery links
+    
+    public func listUserDevices(fido2SvrURL:String, rpId: String) async throws -> [Dictionary<String, Any>] {
+        var rtn = [Dictionary<String, Any>]()
+        do{
+            try checkDevice()
+            
+            if(try await !validSession(fido2SvrURL: fido2SvrURL, rpId: rpId)){
+                Fido2Logger.debug("<listUserDevices> no user session, have to authenticate first.")
+                throw Fido2Error.new(error: .unknown, message: "<listUserDevices> no user session, have to authenticate first.")
+            }
+            
+            var reqDic = Dictionary<String, Any>()
+            reqDic["session"]=sessionId
+            reqDic["rpId"]=rpId
+            
+            let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
+            let jsonStr = String(bytes: jsonData, encoding: .utf8)!
+            Fido2Logger.debug("<listUserDevices> req: \(jsonStr)")
+            
+            let headers = ["User-Agent":LibConfig.deviceName]
+            
+            let respData = try await httpRequest(url: fido2SvrURL+"/usr/dvs/lst", method: "POST",
+                                                 body: jsonStr.data(using: .utf8)!, headers: headers,
+                                                 cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData)
+            let respJsonData = try JSONSerialization.jsonObject(with: respData, options: []) as? [String: Any]
+            Fido2Logger.debug("<listUserDevices> resp text: \(String(describing: respJsonData))")
+            
+            if(nil != respJsonData && respJsonData!["status"] != nil && (respJsonData!["status"] as! String).uppercased()=="OK" &&
+                    respJsonData?["session"] as! String == sessionId){
+                rtn.append(contentsOf: (respJsonData?["devices"] as! [Dictionary<String, Any>]))                
+            } else {
+                throw Fido2Error.new(error: .unknown, message: respJsonData?["errorMessage"] as? String)
+            }
+        } catch {
+            Fido2Logger.err("listUserDevices fail: \(error)")
+            throw error
+        }
+        return rtn;
+    }
+    
+    public func delUserDevice(fido2SvrURL:String, deviceId: Int, rpId: String) async throws -> Bool {
+        var rtn = false
+        do{
+            try checkDevice()
+            
+            if(try await !validSession(fido2SvrURL: fido2SvrURL, rpId: rpId)){
+                Fido2Logger.debug("<delUserDevice> no user session, have to authenticate first.")
+                throw Fido2Error.new(error: .unknown, message: "<delUserDevice> no user session, have to authenticate first.")
+            }
+            
+            var reqDic = Dictionary<String, Any>()
+            reqDic["session"]=sessionId
+            reqDic["rpId"]=rpId
+            reqDic["device_id"]=deviceId
+            
+            let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
+            let jsonStr = String(bytes: jsonData, encoding: .utf8)!
+            Fido2Logger.debug("<delUserDevice> req: \(jsonStr)")
+            
+            let headers = ["User-Agent":LibConfig.deviceName]
+            
+            let respData = try await httpRequest(url: fido2SvrURL+"/usr/dvs/rm", method: "POST",
+                                                 body: jsonStr.data(using: .utf8)!, headers: headers,
+                                                 cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData)
+            let respJsonData = try JSONSerialization.jsonObject(with: respData, options: []) as? [String: Any]
+            Fido2Logger.debug("<delUserDevice> resp text: \(String(describing: respJsonData))")
+            
+            if(nil != respJsonData && respJsonData!["status"] != nil && (respJsonData!["status"] as! String).uppercased()=="OK" &&
+                    respJsonData?["session"] as! String == sessionId){
+                rtn = true
+            } else {
+                throw Fido2Error.new(error: .unknown, message: respJsonData?["errorMessage"] as! String)
+            }
+        } catch {
+            Fido2Logger.err("delUserDevice fail: \(error)")
+            throw error
+        }
+        return rtn;
+    }
+    
+    public func logoutFido2UserSession(){
+        sessionId = ""
+    }
+    
+    private func validSession(fido2SvrURL:String, rpId: String) async throws -> Bool {
+        if(sessionId.isEmpty){
+            return false;
+        }
+        
+        var rtn=false;
+        
+        do{
+            
+            var reqDic = Dictionary<String, Any>()
+            reqDic["session"]=sessionId
+            reqDic["rpId"]=rpId
+            
+            let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
+            var jsonStr = String(bytes: jsonData, encoding: .utf8)!
+            Fido2Logger.debug("<validSession> req: \(jsonStr)")
+            
+            let headers = ["User-Agent":LibConfig.deviceName]
+            
+            let respData = try await httpRequest(url: fido2SvrURL+"/usr/validsession", method: "POST",
+                                                 body: jsonStr.data(using: .utf8)!, headers: headers,
+                                                 cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData)
+            let respJsonData = try JSONSerialization.jsonObject(with: respData, options: []) as? [String: Any]
+            Fido2Logger.debug("<validSession> resp text: \(String(describing: respJsonData))")
+            
+            rtn = (respJsonData?["status"] as! String).uppercased() == "OK"
+            
+        } catch {
+            Fido2Logger.err("validSession fail: \(error)")
             throw error
         }
         
@@ -704,7 +834,8 @@ public class Fido2Core{
         for elem in headers {
             let key = elem.key
             let value = elem.value
-            request.addValue(key, forHTTPHeaderField: value)
+            Fido2Logger.debug("httpRequest header: \(elem)")
+            request.addValue(value, forHTTPHeaderField: key)
         }
         
         request.httpBody = body

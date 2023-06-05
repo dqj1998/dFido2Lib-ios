@@ -17,6 +17,8 @@ struct dFido2LibDemoApp: App {
         LibConfig.enableDebugLog()
         LibConfig.configAccountListExt(enable: true)
         
+        LibConfig.deviceName = "Demo App of dFido2Lib-iOS" //The device name shown on user's device list
+        
         //LibConfig.configInsideAuthenticatorResidentStorage(enable: false)
         
         //Configs for enterprise attestation
