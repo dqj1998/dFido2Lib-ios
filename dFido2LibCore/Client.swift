@@ -323,11 +323,43 @@ public class Fido2Core{
         return rtn;
     }
     
+    public func getRegistrationUser(fido2SvrURL:String, regSessionId: String) async throws -> String {        
+        var rtn="";
+        
+        do{
+            
+            var reqDic = Dictionary<String, Any>()
+            reqDic["session_id"]=regSessionId
+            
+            let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
+            let jsonStr = String(bytes: jsonData, encoding: .utf8)!
+            Fido2Logger.debug("<getRegistrationUser> req: \(jsonStr)")
+            
+            let headers = ["User-Agent":LibConfig.deviceName]
+            
+            let respData = try await httpRequest(url: fido2SvrURL+"/reg/username", method: "POST",
+                                                 body: jsonStr.data(using: .utf8)!, headers: headers,
+                                                 cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData)
+            let respJsonData = try JSONSerialization.jsonObject(with: respData, options: []) as? [String: Any]
+            Fido2Logger.debug("<getRegistrationUser> resp text: \(String(describing: respJsonData))")
+            
+            if((respJsonData?["status"] as! String).uppercased() == "OK"){
+                rtn = respJsonData?["username"] as! String
+            }
+            
+        } catch {
+            Fido2Logger.err("getRegistrationUser fail: \(error)")
+            throw error
+        }
+        
+        return rtn
+    }
+    
     public func logoutFido2UserSession(){
         sessionId = ""
     }
     
-    private func validSession(fido2SvrURL:String, rpId: String) async throws -> Bool {
+    public func validSession(fido2SvrURL:String, rpId: String) async throws -> Bool {
         if(sessionId.isEmpty){
             return false;
         }

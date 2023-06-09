@@ -78,39 +78,72 @@ struct ContentView: View {
                 .font(.headline)
                 .frame(minHeight: 20)
 
-            Button("Register FIDO2") {
-                if !processInputs(){return}
-                
-                proceee_results = "Registering..."
-                isShowingDevicesPicker = false
-                Task{
-                    do{
-                        var opt = Fido2Util.getDefaultRegisterOptions(username: username,
-                                                                      displayname: displayname, rpId: rpids[rpid])
-                        
-                        //Example of customizing options
-                        var authenticatorSelection = opt["authenticatorSelection"] as! Dictionary<String, String>
-                        authenticatorSelection.updateValue("platform", forKey: "authenticatorAttachment") //TODO: cross-platform
-                        opt["authenticatorSelection"] = authenticatorSelection
-                        
-                        let core = Fido2Core()
-                        let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, attestationOptions: opt,
-                                                                          message: "Register new authenticator")
-                        if result {
-                            proceee_results = "Register succ"
-                            try await loadUserDevices(core: core, rpId: rpids[rpid])
-                            isShowingDevicesPicker = true
-                        } else { proceee_results = "Register error"}
-                    }catch{
-                        Fido2Logger.err("call registerAuthenticator fail: \(error)")
-                        if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
-                            proceee_results = "Register " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
-                        } else {
-                            proceee_results = "Register " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
+            HStack{
+                Button("Register FIDO2") {
+                    if !processInputs(){return}
+                    
+                    proceee_results = "Registering..."
+                    isShowingDevicesPicker = false
+                    Task{
+                        do{
+                            var opt = Fido2Util.getDefaultRegisterOptions(username: username,
+                                                                          displayname: displayname, rpId: rpids[rpid])
+                            
+                            //Example of customizing options
+                            var authenticatorSelection = opt["authenticatorSelection"] as! Dictionary<String, String>
+                            authenticatorSelection.updateValue("platform", forKey: "authenticatorAttachment") //TODO: cross-platform
+                            opt["authenticatorSelection"] = authenticatorSelection
+                            
+                            let core = Fido2Core()
+                            let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, attestationOptions: opt,
+                                                                              message: "Register new authenticator")
+                            if result {
+                                proceee_results = "Register succ"
+                                try await loadUserDevices(core: core, rpId: rpids[rpid])
+                                isShowingDevicesPicker = true
+                            } else { proceee_results = "Register error"}
+                        }catch{
+                            Fido2Logger.err("call registerAuthenticator fail: \(error)")
+                            if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
+                                proceee_results = "Register " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
+                            } else {
+                                proceee_results = "Register " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
+                            }
                         }
                     }
                 }
                 
+                Text("|")
+                    .padding()
+                    .font(.title)
+                    .frame(minHeight: 10)
+                
+                Button("Reg session user") {
+                    if username.isEmpty {
+                        proceee_results = "Input registration session ID in user name, please."
+                        return
+                    }
+                    
+                    proceee_results = "Get registration session user..."
+                    isShowingDevicesPicker = false
+                    Task{
+                        do{
+                            let core = Fido2Core()
+                            let result = try await core.getRegistrationUser(fido2SvrURL: fido2SvrURL, regSessionId: username)
+                            if result != "" {
+                                proceee_results = "Got registration session user"
+                                username = result
+                            } else { proceee_results = "This isn't a valid registration session ID."}
+                        }catch{
+                            Fido2Logger.err("call getRegistrationUser fail: \(error)")
+                            if (((error as? Fido2Error)?.details?.localizedDescription) != nil){
+                                proceee_results = "getRegistrationUser " + ((error as? Fido2Error)?.details?.localizedDescription ?? "Fido2Error details unknown")
+                            } else {
+                                proceee_results = "getRegistrationUser " + ((error as? Fido2Error)?.error.rawValue ?? "Fido2Error unknown")
+                            }
+                        }
+                    }
+                }
             }
             
             Text("-")
