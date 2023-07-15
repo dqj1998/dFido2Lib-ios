@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import CryptoKit
 import SwiftUI
+import AuthenticationServices
+import LocalAuthentication
 
 private var sessionId: String = ""
 
@@ -32,6 +34,8 @@ public class Fido2Core{
     public static var enableAccountsList: Bool = false
     
     public static var AccountsKeyId: String = "dFido2Lib_client_accounts"
+    
+    //var authenticationAnchor: ASPresentationAnchor?
     
     public init() {
         self.curTimeout = self.defaultTimeout
@@ -61,7 +65,7 @@ public class Fido2Core{
     
     public func registerAuthenticator(fido2SvrURL:String,
                                       attestationOptions: Dictionary<String, Any>,
-                                      message: String
+                                      message: String //,anchor: ASPresentationAnchor
                         ) async throws -> Bool {
         var rtn=false;
         
@@ -80,7 +84,9 @@ public class Fido2Core{
             var jsonStr = String(bytes: jsonData, encoding: .utf8)!
             Fido2Logger.debug("</attestation/options> req: \(jsonStr)")
             
-            let headers = ["User-Agent":LibConfig.deviceName] //["application/json":"content-type"] //, 
+            let rpDomain = (attestationOptions["rp"] as! Dictionary<String, Any>)["id"] as! String
+            let origURL = "https://"+rpDomain
+            let headers = ["User-Agent":LibConfig.deviceName, "referer": origURL]
             
             let optsData = try await httpRequest(url: fido2SvrURL+"/attestation/options", method: "POST",
                                                  body: jsonStr.data(using: .utf8)!, headers: headers,
@@ -90,8 +96,42 @@ public class Fido2Core{
             
             let pubkCredCrtOpts = try JSONDecoder().decode(PublicKeyCredentialCreationOptions.self, from:optsData)
             Fido2Logger.debug("</attestation/options> resp: \(pubkCredCrtOpts)")
+            
+            var pubkeyCred: PublicKeyCredential<AuthenticatorAttestationResponse>;
+            //Check if can use Passkey
+            if((jsonOptsData?["extensions"] != nil) && (jsonOptsData?["extensions"] as! Dictionary<String, Any>)["passkeySync"] != nil &&
+                    (jsonOptsData?["extensions"] as! Dictionary<String, Any>)["passkeySync"] as! Bool){
+                let authMgr = AuthorizationManager()
+                do{
+                    let regResult = try await authMgr.startRegistration(rpDomain: rpDomain, pubkeyCredOpts: pubkCredCrtOpts, allowMultipleRegistration: LibConfig.allowPasskeyMultipleRegistration)
                 
-            let pubkeyCred = try await self.createNewCredential(options: pubkCredCrtOpts, origin: fido2SvrURL, message: message)
+                    Fido2Logger.debug("Passkey reg resp: \(regResult)")
+                    
+                    let response = AuthenticatorAttestationResponse(
+                        clientDataJSON:    Base64.encodeBase64URL(regResult.rawClientDataJSON),
+                        attestationObject: Base64.encodeBase64URL(regResult.rawAttestationObject!)
+                        //dqj TODO: support [[transports]]
+                    )
+                    
+                    pubkeyCred = PublicKeyCredential<AuthenticatorAttestationResponse>(
+                        rawId:  Base64.encodeBase64URL(regResult.credentialID),
+                        id:     Base64.encodeBase64URL(regResult.credentialID),
+                        response: response
+                    )
+                }catch{
+                    if(error is Fido2Error){
+                        Fido2Logger.err("call startRegistration with Passkey fail: \((error as! Fido2Error).error):\(error.localizedDescription)")
+                        throw error
+                    }else{
+                        Fido2Logger.err("call startRegistration with Passkey fail: \(error):\(error.localizedDescription)")
+                        throw Fido2Error.new(error: .unknown, message: error.localizedDescription)
+                    }
+                    
+                }
+            }else{
+                pubkeyCred = try await self.createNewCredential(options: pubkCredCrtOpts, origin: origURL, message: message)
+            }
+            
             jsonStr = pubkeyCred.toJSON() ?? ""
             Fido2Logger.debug("</attestation/result> req: \(jsonStr)")
             
@@ -101,7 +141,7 @@ public class Fido2Core{
                                                      body: jsonStr.data(using: .utf8)!, headers: headers,
                                                       cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData, timeout: curTimeout)
             }catch{
-                Fido2Logger.debug("</attestation/result> http exception \(error)")
+                Fido2Logger.err("</attestation/result> http exception \(error)")
                 throw Fido2Error.new(error: .unknown, message: error.localizedDescription)
             }
             
@@ -119,7 +159,7 @@ public class Fido2Core{
             if !rsltStr.isEmpty {
                 if let rep = try JSONSerialization.jsonObject(with: rsltStr.data(using: String.Encoding.utf8)!, options: []) as? [String: Any] {
                     rtn = nil != rep["status"] && (rep["status"] as! String).uppercased() == "OK"
-                    sessionId = rep["session"] as! String
+                    sessionId = rep["session"] as? String ?? ""
                     
                     if rtn && Fido2Core.enableAccountsList{
                         let rp = pubkCredCrtOpts.rp.id ?? pubkCredCrtOpts.rp.name
@@ -177,7 +217,9 @@ public class Fido2Core{
             var jsonStr = String(bytes: jsonData, encoding: .utf8)!
             Fido2Logger.debug("</assertion/options> req: \(jsonStr)")
             
-            let headers = ["User-Agent":LibConfig.deviceName] //["application/json":"content-type"]
+            let rpDomain = (assertionOptions["rp"] as! Dictionary<String, Any>)["id"] as! String
+            let origURL = "https://"+rpDomain
+            let headers = ["User-Agent":LibConfig.deviceName, "referer": origURL]
             
             let optsData = try await httpRequest(url: fido2SvrURL+"/assertion/options", method: "POST",
                                                  body: jsonStr.data(using: .utf8)!, headers: headers,
@@ -201,8 +243,38 @@ public class Fido2Core{
                 pubkCredReqOpts.rpId = (assertionOptions["rp"] as! Dictionary<String, Any>)["id"] as! String?
             }
             
-            let pubkeyCred = try await self.discoverFromExternalSource(options: pubkCredReqOpts, origin: fido2SvrURL, message: message,
-                                                                       selectedCredId: selectedCredId)
+            var pubkeyCred:PublicKeyCredential<AuthenticatorAssertionResponse>;
+            //Check if can use Passkey
+            if((jsonOptsData?["extensions"] != nil) && (jsonOptsData?["extensions"] as! Dictionary<String, Any>)["passkeySync"] != nil &&
+                    (jsonOptsData?["extensions"] as! Dictionary<String, Any>)["passkeySync"] as! Bool){
+                let challenge = (jsonOptsData?["challenge"] as! String).data(using: .utf8)
+                let authMgr = AuthorizationManager()
+                do{
+                    let authResult = try await authMgr.startAuthentication(rpDomain: rpDomain, challenge: challenge!)
+                
+                    Fido2Logger.debug("Passkey auth resp: \(authResult)")
+                
+                    let response = AuthenticatorAssertionResponse(
+                        clientDataJSON:    Base64.encodeBase64URL(authResult.rawClientDataJSON),
+                        authenticatorData: Base64.encodeBase64URL(authResult.rawAuthenticatorData),
+                        signature:         Base64.encodeBase64URL(authResult.signature),
+                        userHandle:        Base64.encodeBase64URL(authResult.userID)
+                        //dqj TODO: support [[transports]]
+                    )
+                    
+                    pubkeyCred = PublicKeyCredential<AuthenticatorAssertionResponse>(
+                        rawId:  Base64.encodeBase64URL(authResult.credentialID),
+                        id:     Base64.encodeBase64URL(authResult.credentialID),
+                        response: response
+                    )
+                }catch{
+                    Fido2Logger.err("call startAuthentication with Passkey fail: \(error)")
+                    throw Fido2Error.new(error: .unknown, message: error.localizedDescription)
+                }
+            }else{
+                pubkeyCred = try await self.discoverFromExternalSource(options: pubkCredReqOpts, origin: origURL, message: message,
+                                                                           selectedCredId: selectedCredId)
+            }
             jsonStr = pubkeyCred.toJSON() ?? ""
             Fido2Logger.debug("</assertion/result> req: \(jsonStr)")
             
@@ -256,7 +328,9 @@ public class Fido2Core{
             
             var reqDic = Dictionary<String, Any>()
             reqDic["session"]=sessionId
-            reqDic["rpId"]=rpId
+            var rpOptions = Dictionary<String, Any>()
+            rpOptions["id"] = rpId
+            reqDic["rp"] = rpOptions
             
             let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
             let jsonStr = String(bytes: jsonData, encoding: .utf8)!
@@ -295,7 +369,9 @@ public class Fido2Core{
             
             var reqDic = Dictionary<String, Any>()
             reqDic["session"]=sessionId
-            reqDic["rpId"]=rpId
+            var rpOptions = Dictionary<String, Any>()
+            rpOptions["id"] = rpId
+            reqDic["rp"] = rpOptions
             reqDic["device_id"]=deviceId
             
             let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
@@ -314,7 +390,7 @@ public class Fido2Core{
                     respJsonData?["session"] as! String == sessionId){
                 rtn = true
             } else {
-                throw Fido2Error.new(error: .unknown, message: respJsonData?["errorMessage"] as! String)
+                throw Fido2Error.new(error: .unknown, message: respJsonData?["errorMessage"] as? String)
             }
         } catch {
             Fido2Logger.err("delUserDevice fail: \(error)")
@@ -370,7 +446,9 @@ public class Fido2Core{
             
             var reqDic = Dictionary<String, Any>()
             reqDic["session"]=sessionId
-            reqDic["rpId"]=rpId
+            var rpOptions = Dictionary<String, Any>()
+            rpOptions["id"] = rpId
+            reqDic["rp"] = rpOptions
             
             let jsonData = try JSONSerialization.data(withJSONObject: reqDic)
             var jsonStr = String(bytes: jsonData, encoding: .utf8)!
@@ -941,5 +1019,131 @@ public struct Accounts : Codable{
             return nil
         }
         return rtn
+    }
+}
+
+//Passkeys
+
+class AuthorizationManager: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding{
+    var resultReg:              ASAuthorizationPlatformPublicKeyCredentialRegistration?
+    var resultAuth:             ASAuthorizationPlatformPublicKeyCredentialAssertion?
+    
+    var errorCode: ASAuthorizationError.Code?
+    
+    private var activeRegContinuation: CheckedContinuation<ASAuthorizationPlatformPublicKeyCredentialRegistration, Error>?
+    private var activeAuthContinuation: CheckedContinuation<ASAuthorizationPlatformPublicKeyCredentialAssertion, Error>?
+
+    func startAuthentication(rpDomain: String, challenge:Data) async throws -> ASAuthorizationPlatformPublicKeyCredentialAssertion {
+        return try await withCheckedThrowingContinuation { continuation in
+            activeAuthContinuation = continuation
+            
+            let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rpDomain)
+            
+            let authRequest = publicKeyCredentialProvider.createCredentialAssertionRequest(challenge: challenge)
+            
+            let authController = ASAuthorizationController(authorizationRequests: [ authRequest ] )
+            authController.delegate = self
+            authController.presentationContextProvider = self
+            authController.performRequests()
+        }
+    }
+    
+    func startRegistration(rpDomain: String, pubkeyCredOpts: PublicKeyCredentialCreationOptions, allowMultipleRegistration: Bool = false ) async throws -> ASAuthorizationPlatformPublicKeyCredentialRegistration {
+        if(!allowMultipleRegistration && !(pubkeyCredOpts.excludeCredentials?.isEmpty ?? true)){
+            throw Fido2Error(error: .invalidState)
+        }
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            activeRegContinuation = continuation
+            
+            let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: rpDomain)
+            
+            let registrationRequest = publicKeyCredentialProvider.createCredentialRegistrationRequest(
+                challenge: pubkeyCredOpts.challenge.data(using: .utf8)!, name: pubkeyCredOpts.user.name, userID: pubkeyCredOpts.user.id.data(using: .utf8)!)
+            
+            /* For security keys, may support in the future.
+            let publicKeyCredentialProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: rpDomain)
+            
+            let registrationRequest = publicKeyCredentialProvider.createCredentialRegistrationRequest(
+                challenge: pubkeyCredOpts.challenge.data(using: .utf8)!, displayName: pubkeyCredOpts.user.displayName,
+                name: pubkeyCredOpts.user.name,
+                userID: pubkeyCredOpts.user.id.data(using: .utf8)!);
+            registrationRequest.attestationPreference = ASAuthorizationPublicKeyCredentialAttestationKind(rawValue:pubkeyCredOpts.attestation.rawValue)
+            if(nil != pubkeyCredOpts.authenticatorSelection){
+                registrationRequest.userVerificationPreference = ASAuthorizationPublicKeyCredentialUserVerificationPreference(rawValue: pubkeyCredOpts.authenticatorSelection!.userVerification.rawValue)
+                if(nil != pubkeyCredOpts.authenticatorSelection!.residentKey){
+                    registrationRequest.residentKeyPreference = ASAuthorizationPublicKeyCredentialResidentKeyPreference(rawValue: pubkeyCredOpts.authenticatorSelection!.residentKey!.rawValue)
+                }
+                
+            }
+            pubkeyCredOpts.pubKeyCredParams.forEach{ para in
+                let alg = ASCOSEAlgorithmIdentifier(rawValue: para.getCOSEAlgorithmIdentifier().rawValue)
+                let npara = ASAuthorizationPublicKeyCredentialParameters(algorithm: alg)
+                registrationRequest.credentialParameters.append(npara)
+            }
+            
+            if(nil != pubkeyCredOpts.excludeCredentials){
+                pubkeyCredOpts.excludeCredentials!.forEach { cred in
+                    var ntransports:[ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport] = []
+                    if(nil != cred.transports){
+                        cred.transports?.forEach{ tp in
+                            ntransports.append(ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor.Transport(rawValue: tp))
+                        }
+                    }
+                    let ncred = ASAuthorizationSecurityKeyPublicKeyCredentialDescriptor(
+                        credentialID: cred.id.data(using: .utf8)!,
+                        transports: ntransports)
+                    
+                    registrationRequest.excludedCredentials.append(ncred)
+                }
+            }
+            */
+            
+            let authController = ASAuthorizationController(authorizationRequests: [ registrationRequest ] )
+            authController.delegate = self
+            authController.presentationContextProvider = self
+            authController.performRequests()
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let credentialRegistration as ASAuthorizationPlatformPublicKeyCredentialRegistration:
+            Fido2Logger.debug("New passkey registered: \(credentialRegistration)")
+            resultReg = credentialRegistration
+            activeRegContinuation?.resume(returning: credentialRegistration)
+            activeRegContinuation = nil
+        case let credentialAssertion as ASAuthorizationPlatformPublicKeyCredentialAssertion:
+            Fido2Logger.debug("Passkey Auth: \(credentialAssertion)")
+            resultAuth = credentialAssertion
+            activeAuthContinuation?.resume(returning: credentialAssertion)
+            activeAuthContinuation = nil
+        default:
+            fatalError("Unknown authorization type.")
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        Fido2Logger.err("AuthorizationManager fail: \((error as NSError).userInfo)")
+        guard let authorizationError = error as? ASAuthorizationError else {
+            errorCode = .unknown
+            Fido2Logger.err("Unexpected authorization error: \(error.localizedDescription)")
+            return
+        }
+        errorCode = authorizationError.code
+        if(nil != activeAuthContinuation){
+            activeAuthContinuation?.resume(throwing: error)
+            activeAuthContinuation = nil
+        }else{
+            activeRegContinuation?.resume(throwing: error)
+            activeRegContinuation = nil
+        }
+    }
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        let window = (windowScene?.windows.first)!
+        return window
     }
 }

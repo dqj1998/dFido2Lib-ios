@@ -9,9 +9,9 @@ import SwiftUI
 import dFido2LibCore
 import dFido2LibExt
 
-let fido2SvrURL = "https://mac.dqj-macpro.com" /*"http://192.168.0.124:3000"*/
+let fido2SvrURL = "https://fido2.amipro.me"
 
-let rpids = ["mac.dqj-macpro.com","rp01.abc.com", "rp02.def.com"]
+let rpids = ["sample.amipro.me", "fido2.amipro.me", "test.amipro.me","rp01.abc.com", "rp02.def.com", "rp03.abc.com"]
 
 var cur_accounts:[String] = []
 var cur_credBase64Ids:[String] = []
@@ -19,7 +19,6 @@ var user_devices:[Dictionary<String, Any>] = []
 var user_devices_txt:[String] = []
 
 struct ContentView: View {
-    
     
     @State public var proceee_results:String = "---"
     @State private var inside_resident_storage:String =
@@ -34,6 +33,8 @@ struct ContentView: View {
     
     @State private var selectedDeviceIndex:Int = -1
     @State private var isShowingDevicesPicker = false
+    
+    
     
     var body: some View {
         VStack {
@@ -95,8 +96,7 @@ struct ContentView: View {
                             opt["authenticatorSelection"] = authenticatorSelection
                             
                             let core = Fido2Core()
-                            let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, attestationOptions: opt,
-                                                                              message: "Register new authenticator")
+                            let result = try await core.registerAuthenticator(fido2SvrURL: fido2SvrURL, attestationOptions: opt, message: "Register new authenticator")
                             if result {
                                 proceee_results = "Register succ"
                                 try await loadUserDevices(core: core, rpId: rpids[rpid])

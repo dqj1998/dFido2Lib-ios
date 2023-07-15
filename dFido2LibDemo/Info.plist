@@ -6,16 +6,14 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>dqj-macpro.com</key>
+			<key>mac.dqj-macpro.com</key>
 			<dict>
-				<key>NSIncludesSubdomains</key>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
 		</dict>
 	</dict>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Authenticate yourself</string>
 </dict>
 </plist>

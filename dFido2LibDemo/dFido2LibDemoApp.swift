@@ -15,7 +15,10 @@ struct dFido2LibDemoApp: App {
         LibConfig.enableJailBroken = true //For development, comment out for product!
         
         LibConfig.enableDebugLog()
+        
         LibConfig.configAccountListExt(enable: true)
+        
+        //LibConfig.allowPasskeyMultipleRegistration = true
         
         LibConfig.deviceName = "Demo App of dFido2Lib-iOS" //The device name shown on user's device list
         

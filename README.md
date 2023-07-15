@@ -30,6 +30,15 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 * Fido2Core.enabledInsideAuthenticatorResidentStorage
 * Fido2Core.configInsideAuthenticatorSilentCredentialDiscovery
 
+# Passkeys support
+The SDK will use iOS FIDO2 native API (which is known as Passkeys) if set 'passkey_sync' to true on the server.
+On Passkeys, keys are synchronized around devices with the same user's Apple account.
+iOS 16 has full support for Passkeys, and 15 needs to be enabled manually in the phone's developer settings. 
+
+## Limitations of Passkeys API
+* Does NOT support discoverable credentials
+* Does NOT check to exclude credentials to prevent multiple registrations on the same device.
+So we provide an extra config 'LibConfig.allowPasskeyMultipleRegistration' to provide the check before calling Passkeys API. 
 
 # Tested FIDO2 servers 
 * fido2-node (https://github.com/dqj1998/fido2-node.git) 
