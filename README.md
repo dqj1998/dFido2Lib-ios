@@ -30,6 +30,10 @@ FIDO2/WebAuthn heavily depends on browsers' implementation. A native lib is sign
 * Fido2Core.enabledInsideAuthenticatorResidentStorage
 * Fido2Core.configInsideAuthenticatorSilentCredentialDiscovery
 
+# Recovery
+SDK provides device registration by recovery session ID, referer the 'Reg session user' button.
+The recovery session ID is the rid in the recovery link.
+
 # Passkeys support
 The SDK will use iOS FIDO2 native API (which is known as Passkeys) if set 'passkey_sync' to true on the server.
 On Passkeys, keys are synchronized around devices with the same user's Apple account.
