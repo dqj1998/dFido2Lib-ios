@@ -9,10 +9,10 @@ import Foundation
 import dFido2LibCore
 
 public class Fido2Util{
-    public static func getDefaultRegisterOptions(username: String, displayname: String, rpId: String = "") -> Dictionary<String, Any> {
+    public static func getDefaultRegisterOptions(username: String, displayname: String, rpId: String = "", userVerification: String = "preferred") -> Dictionary<String, Any> {
         
         var authenticatorSelection = Dictionary<String, Any>()
-        authenticatorSelection["userVerification"]="preferred"
+        authenticatorSelection["userVerification"] = userVerification
         
         var attestationOptions = Dictionary<String, Any>()
         attestationOptions["username"] = username
@@ -28,10 +28,10 @@ public class Fido2Util{
         return attestationOptions
     }
     
-    public static func getDefaultAuthenticateOptions(username: String = "", rpId: String = "") -> Dictionary<String, Any> {
+    public static func getDefaultAuthenticateOptions(username: String = "", rpId: String = "", userVerification: String = "preferred") -> Dictionary<String, Any> {
         
         var authenticatorSelection = Dictionary<String, Any>()
-        authenticatorSelection["userVerification"]="preferred"
+        authenticatorSelection["userVerification"] = userVerification
         
         var assertionOptions = Dictionary<String, Any>()
         if (username.count > 0) {
